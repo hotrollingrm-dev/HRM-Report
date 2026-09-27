@@ -1,0 +1,60 @@
+{
+  "id": "./",
+  "name": "HRM Trouble Report",
+  "short_name": "HRM Report",
+  "description": "ระบบแจ้งปัญหาเครื่องจักร Machine Stop QIC และ Backup ของแผนก Hot Rolling Mill",
+  "lang": "th",
+  "dir": "ltr",
+  "categories": ["productivity", "utilities", "business"],
+
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait",
+
+  "background_color": "#FAF1DE",
+  "theme_color": "#FAF1DE",
+
+  "prefer_related_applications": false,
+
+  "icons": [
+    { "src": "icon-192.png",          "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png",          "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+
+  "shortcuts": [
+    {
+      "name": "แจ้งปัญหาเครื่องจักร", "short_name": "REPORT",
+      "description": "เปิดฟอร์มแจ้ง Trouble Report",
+      "url": "./index.html?go=report",
+      "icons": [{ "src": "sc-report.png", "sizes": "96x96", "type": "image/png" }]
+    },
+    {
+      "name": "แจ้งเครื่องจักรหยุด", "short_name": "STOP",
+      "description": "เปิดฟอร์ม Machine Stop",
+      "url": "./index.html?go=stop",
+      "icons": [{ "src": "sc-stop.png", "sizes": "96x96", "type": "image/png" }]
+    },
+    {
+      "name": "แจ้งข้อมูล QIC", "short_name": "QIC",
+      "description": "เปิดฟอร์ม QIC",
+      "url": "./index.html?go=qic",
+      "icons": [{ "src": "sc-qic.png", "sizes": "96x96", "type": "image/png" }]
+    },
+    {
+      "name": "แจ้ง PC Backup", "short_name": "BACKUP",
+      "description": "เปิดฟอร์ม Backup",
+      "url": "./index.html?go=backup",
+      "icons": [{ "src": "sc-backup.png", "sizes": "96x96", "type": "image/png" }]
+    }
+  ],
+
+  "screenshots": [
+    { "src": "screenshot-home.png",   "sizes": "540x1108", "type": "image/png",
+      "form_factor": "narrow", "label": "หน้าหลัก เลือกระบบที่ต้องการ" },
+    { "src": "screenshot-report.png", "sizes": "540x1108", "type": "image/png",
+      "form_factor": "narrow", "label": "ฟอร์มแจ้งปัญหาเครื่องจักร" }
+  ]
+}
