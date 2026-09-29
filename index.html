@@ -330,6 +330,9 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
 /* ---------- MODULE HOST ---------- */
 .mod-body{flex:1;position:relative;min-height:0;background:var(--bg)}
 .mod-body iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:none;background:var(--bg)}
+/* ให้ iframe จบเหนือแถบเมนูล่าง — ปุ่มที่ติดขอบล่างของโมดูล (คัดลอก/ตรวจสอบ) จะไม่โดนแถบบัง */
+.mod-body{padding-bottom:0 !important}
+.mod-body iframe{height:calc(100% - var(--nav-h) - var(--safe-b) - 30px)}
 .mod-body iframe.on{display:block;animation:rise .3s ease both}
 
 .notice{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:30px 26px;text-align:center}
@@ -947,6 +950,9 @@ body,button,input,select,textarea{font-family:var(--font)}
 .dr .o{stroke:#6B4226;stroke-width:3;stroke-linejoin:round;stroke-linecap:round}
 .dr .o2{stroke-width:2.3}
 
+/* ปุ่ม + มุมล่างขวา: ไม่ใช้แล้ว เพราะแถบเมนูล่างมีครบทุกระบบ */
+.fab-zone,.scrim{display:none !important}
+
 /* จอแคบมาก */
 @media (max-width:360px){
   .logo-1{font-size:34px}
@@ -1059,7 +1065,7 @@ body,button,input,select,textarea{font-family:var(--font)}
           <span class="switch" id="swSplash" role="switch" tabindex="0"><i></i></span></div>
       </div>
       <div class="set-group">
-        <div class="set-row"><i class="ico" id="icTag"></i><span class="t">เวอร์ชัน</span><span class="v">1.3.0</span></div>
+        <div class="set-row"><i class="ico" id="icTag"></i><span class="t">เวอร์ชัน</span><span class="v">1.3.1</span></div>
         <button class="set-row" id="btnClearAct"><i class="ico" id="icHist"></i><span class="t">ล้างรายการล่าสุด</span><span class="v">›</span></button>
       </div>
       <div style="height:20px"></div>
@@ -4635,6 +4641,34 @@ html[data-uacj="report"] .panel{
 }
 .hdr-btn:active{ transform:translateY(3px) !important;
   box-shadow:0 0 0 2px var(--u-rim-deep), 0 1px 0 2px var(--u-rim-deep) !important; }
+
+/* ===========================================================================
+   24. iPhone — ช่องวันที่/เวลาล้นกรอบ
+   ---------------------------------------------------------------------------
+   Safari บน iOS ให้ช่อง date/time มีความกว้างขั้นต่ำของตัวเอง และจัดข้อความกลาง
+   ทำให้ช่องยื่นเลยการ์ดออกไป — บังคับให้กว้างเท่าพื้นที่ที่มี
+   ========================================================================= */
+input[type="date"], input[type="time"], input[type="datetime-local"], input[type="month"],
+.inp-date, .inp-time{
+  display:block;
+  width:100% !important; max-width:100% !important; min-width:0 !important;
+  box-sizing:border-box !important;
+  text-align:left;
+}
+input[type="date"]::-webkit-date-and-time-value,
+input[type="time"]::-webkit-date-and-time-value,
+input[type="datetime-local"]::-webkit-date-and-time-value{
+  text-align:left; margin:0; min-height:1.4em;
+}
+/* เฉพาะ iOS (Safari/Chrome บน iPhone) — ปิดหน้าตา native ที่ไม่ยอมหด แตะแล้วยังเปิดตัวเลือกวันที่ได้ปกติ */
+@supports (-webkit-touch-callout:none){
+  input[type="date"], input[type="time"], input[type="datetime-local"], input[type="month"]{
+    -webkit-appearance:none !important; appearance:none !important;
+    line-height:1.4 !important;
+  }
+}
+/* พ่อแม่ที่เป็น flex/grid ต้องยอมให้หดได้ ไม่งั้นช่องจะดันการ์ดให้ล้น */
+.form-group, .field, .f-group, .eg, .nr-group, .card-body, .row > *, .grid > *{ min-width:0 !important; }
 </script>
 
 <script>
