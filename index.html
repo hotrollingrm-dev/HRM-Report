@@ -1040,6 +1040,107 @@ img{-webkit-user-drag:none}
   .qbtn{font-size:12.5px;gap:5px;padding:7px 8px}
 }
 
+
+/* ============================================================
+   BOTTOM NAV — Cute Yellow + Soft Outline + Jelly Motion
+   (ทับสไตล์แถบล่างเดิมทั้งหมด ไม่แตะส่วนอื่น)
+   ============================================================ */
+.bottomnav{
+  background:#FFFBF0;
+  border:1.5px solid #D9B77E; outline:0;
+  border-radius:30px;
+  box-shadow:0 6px 18px rgba(140,98,46,.14), 0 1px 0 rgba(255,255,255,.9) inset;
+  padding:0 10px 0 7px;
+}
+.bottomnav.nudge{animation:navNudge .42s ease}
+@keyframes navNudge{0%,100%{translate:0 0}40%{translate:0 -1px}}
+/* ปุ่มหน้าหลัก */
+.nav-brand{
+  background:#FFD45C;border:1.5px solid #C58F2E;
+  box-shadow:0 2px 6px rgba(197,143,46,.25), inset 0 1px 0 rgba(255,255,255,.6);
+  overflow:hidden;
+}
+.nav-brand .ic{--i-navy:#8A5A1E;--i-cream:#FFF6DC;--i-custard:#F5A623;--i-white:#fff}
+.nav-brand .ic .l,.nav-brand .ic .k{stroke-width:1.6}
+.nav-brand.on{background:#FFC93C;animation:none}
+.nav-brand.on::after{display:none}
+.nav-brand:active{transform:scale(.92)}
+
+/* รายการเมนู */
+.nav-items{position:relative;isolation:isolate}
+.nav-b{z-index:1;overflow:hidden;border-radius:18px;color:#9C7B58;font-weight:600}
+.nav-b::after,.nav-b.on::after{display:none !important}
+.nav-b .ico{width:40px;height:30px;border:0 !important;background:transparent !important;box-shadow:none !important;
+  transform:none !important;animation:none !important}
+.nav-b .ic{width:23px;height:23px}
+.nav-b .ic .l,.nav-b .ic .k{stroke-width:1.6}
+.nav-b em{transform:none !important;font-family:var(--font) !important;font-weight:600 !important;transition:color .2s ease}
+/* สีไอคอนแยกตามเมนู: ปกติสีอ่อนลง เลือกแล้วสีเต็ม */
+.nav-b:not(.on) .ic,.nav-b.on .ic{--i-navy:var(--md);--i-custard:var(--mc);--i-cream:var(--mt);--i-white:#fff;--i-red:var(--mc);--i-green:var(--mc)}
+.nav-b:not(.on) .ic{opacity:.78;filter:saturate(.8)}
+.nav-b.on .ic{opacity:1;filter:none}
+.nav-b.on em{color:var(--md) !important}
+.nav-b:active .ic{animation:none !important}
+/* ไอคอนเด้งเบา ๆ ครั้งเดียวตอนถูกเลือก (อยู่ที่เดิม ไม่หลุด layout) */
+.nav-b.pop .ic{animation:icBounce .28s cubic-bezier(.34,1.56,.64,1) both !important}
+@keyframes icBounce{0%{transform:scale(1)}35%{transform:scale(.9)}70%{transform:scale(1.08)}100%{transform:scale(1)}}
+
+/* ก้อนเจลลี่ใต้เมนูที่เลือก */
+.nav-ind{
+  position:absolute;z-index:0;top:50%;left:0;height:52px;margin-top:-26px;
+  width:calc(100% / var(--nav-cols,4));
+  transform:translateX(calc(var(--ni,0) * 100%));
+  transition:transform .42s cubic-bezier(.34,1.56,.64,1), opacity .2s ease;
+  opacity:0;pointer-events:none;
+}
+.nav-ind.show{opacity:1}
+.nav-ind.noanim{transition:none}
+.nav-ind i{
+  position:absolute;inset:0 5px;display:block;border-radius:18px;
+  background:var(--mt,#FFF0CF);border:1.5px solid color-mix(in srgb, var(--mc,#F2A93B) 55%, #fff);
+  box-shadow:0 2px 6px color-mix(in srgb, var(--mc,#F2A93B) 22%, transparent);
+  transition:background .3s ease,border-color .3s ease;
+}
+.nav-ind.jelly i{animation:jelly .42s cubic-bezier(.34,1.56,.64,1)}
+@keyframes jelly{
+  0%{transform:scale(1,1)}
+  25%{transform:scale(1.28,.86)}
+  55%{transform:scale(1.12,.92)}
+  75%{transform:scale(.92,1.08)}
+  100%{transform:scale(1,1)}
+}
+/* ประกายเล็ก ๆ 2 จุด แล้วจางหาย */
+.nav-ind::before,.nav-ind::after{
+  content:'';position:absolute;width:7px;height:7px;opacity:0;pointer-events:none;
+  background:var(--mc,#F2A93B);
+  clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);
+}
+.nav-ind::before{top:-2px;right:8px}
+.nav-ind::after{bottom:0;left:9px;width:5px;height:5px;background:#FFD45C}
+.nav-ind.glint::before{animation:tinySpark .3s ease-out both}
+.nav-ind.glint::after{animation:tinySpark .3s ease-out .05s both}
+@keyframes tinySpark{0%{opacity:0;transform:scale(.3) rotate(0)}40%{opacity:1;transform:scale(1.1) rotate(20deg)}100%{opacity:0;transform:scale(.8) rotate(35deg)}}
+
+/* ripple */
+.nav-rip{position:absolute;z-index:0;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;
+  background:rgba(245,166,35,.35);pointer-events:none;animation:navRip .3s ease-out forwards}
+@keyframes navRip{from{transform:scale(.4);opacity:.9}to{transform:scale(7);opacity:0}}
+
+/* จุดแจ้งเตือนเล็ก */
+.nav-b .bell{border-width:1.5px}
+
+/* ---------- เปลี่ยนหน้าโมดูลแบบเด้งขึ้นเบา ๆ ---------- */
+.mod-body iframe.on{animation:pageIn .3s cubic-bezier(.34,1.3,.64,1) both}
+.mod-body iframe.out{display:block;z-index:0;animation:pageOut .2s ease both;pointer-events:none}
+.mod-body iframe.on{z-index:1}
+@keyframes pageIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes pageOut{from{opacity:1;transform:none}to{opacity:0;transform:translateY(-6px)}}
+
+@media (prefers-reduced-motion:reduce){
+  .nav-ind{transition:none}
+  .nav-ind.jelly i,.nav-b.pop .ic,.bottomnav.nudge,.mod-body iframe.on,.mod-body iframe.out{animation:none !important}
+}
+
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001s!important;transition-duration:.001s!important}}
 </style>
 </head>
@@ -1149,7 +1250,7 @@ img{-webkit-user-drag:none}
           <span class="switch" id="swSplash" role="switch" tabindex="0"><i></i></span></div>
       </div>
       <div class="set-group">
-        <div class="set-row"><i class="ico" id="icTag"></i><span class="t">เวอร์ชัน</span><span class="v">1.5.0</span></div>
+        <div class="set-row"><i class="ico" id="icTag"></i><span class="t">เวอร์ชัน</span><span class="v">1.6.0</span></div>
         <button class="set-row" id="btnClearAct"><i class="ico" id="icHist"></i><span class="t">ล้างรายการล่าสุด</span><span class="v">›</span></button>
       </div>
       <div style="height:20px"></div>
@@ -4998,6 +5099,13 @@ function buildMenu(){
       <span class="art">${ART[k]||ico(m.icon)}</span>
       <span class="plate">${m.desc}</span></button>`; }).join('');
 }
+/* สีไอคอนแถบล่าง — แต่ละเมนูมีสีของตัวเอง เส้นเป็นสีเข้มนุ่ม ๆ ของสีนั้น ไม่ใช้ดำ */
+const NAV_TONE={
+  report:'--mc:#3E9AD8;--mt:#DDF0FC;--md:#2F6E9E',
+  stop:  '--mc:#EF5B55;--mt:#FDE2DF;--md:#A8433E',
+  qic:   '--mc:#F2A93B;--mt:#FFF0CF;--md:#A86F1C',
+  backup:'--mc:#4FB063;--mt:#DFF3E1;--md:#2F7A40'
+};
 function buildNav(){
   const items=[{k:'home',icon:'factory',label:'หน้าหลัก',ac:'--primary',act:'--light'}]
     .concat(ORDER.map(k=>({k,icon:MODULES[k].icon,label:MODULES[k].title,ac:MODULES[k].ac,act:MODULES[k].act})));
@@ -5006,8 +5114,8 @@ function buildNav(){
   nav.style.setProperty('--nav-cols', mods.length);
   nav.innerHTML =
     `<button class="nav-brand" data-nav="home" aria-label="หน้าหลัก">${ico('factory')}</button>`
-    + '<div class="nav-items">' + mods.map(i=>
-      `<button class="nav-b" data-nav="${i.k}" style="--nb:var(${i.ac});--nbt:var(${i.act})">
+    + '<div class="nav-items"><span class="nav-ind" id="navInd" aria-hidden="true"><i></i></span>' + mods.map(i=>
+      `<button class="nav-b" data-nav="${i.k}" style="--nb:var(${i.ac});--nbt:var(${i.act});${NAV_TONE[i.k]||''}">
          <i class="ico">${ico(i.icon)}</i><em>${i.label}</em>
          <span class="bell" id="bell-${i.k}"></span></button>`).join('') + '</div>';
 }
@@ -5068,7 +5176,34 @@ function back(){
   $('#fabZone').style.display=(current==='settings')?'none':'';
 }
 function atHome(){ document.body.classList.toggle('at-home', current==='home'); }
-function syncNav(){ $$('.nav-b').forEach(b=>b.classList.toggle('on',b.dataset.nav===current)); }
+let navIdx=-1, navSparkT=0;
+const reduceMotion=()=>window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+function syncNav(){
+  const btns=$$('.nav-b'); let idx=-1;
+  btns.forEach((b,i)=>{ const on=b.dataset.nav===current;
+    if(on && !b.classList.contains('on')){ b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); }
+    b.classList.toggle('on',on); if(on) idx=i; });
+  const ind=$('#navInd'), nav=$('#bnav'); if(!ind) return;
+  if(idx<0){ ind.classList.remove('show'); navIdx=-1; return; }
+  const tone=NAV_TONE[btns[idx].dataset.nav]||'';
+  ind.setAttribute('style','--ni:'+idx+';'+tone);
+  const moved = navIdx>=0 && navIdx!==idx;
+  if(moved && !reduceMotion()){
+    ind.classList.remove('jelly','glint'); void ind.offsetWidth; ind.classList.add('jelly');
+    nav.classList.remove('nudge'); void nav.offsetWidth; nav.classList.add('nudge');
+    clearTimeout(navSparkT);
+    navSparkT=setTimeout(()=>{ ind.classList.remove('glint'); void ind.offsetWidth; ind.classList.add('glint'); },380);
+  }
+  if(!ind.classList.contains('show')){ ind.classList.add('noanim'); ind.classList.add('show'); void ind.offsetWidth; ind.classList.remove('noanim'); }
+  navIdx=idx;
+}
+/* วงน้ำกระเพื่อมเล็ก ๆ ตรงจุดที่นิ้วแตะ */
+document.addEventListener('pointerdown',e=>{
+  const b=e.target.closest('.nav-b,.nav-brand'); if(!b || reduceMotion()) return;
+  const r=b.getBoundingClientRect(), d=document.createElement('span');
+  d.className='nav-rip'; d.style.left=(e.clientX-r.left)+'px'; d.style.top=(e.clientY-r.top)+'px';
+  b.appendChild(d); setTimeout(()=>d.remove(),340);
+},{passive:true});
 
 /* ---------- MODULE LOADER ----------
    ใช้ iframe เพื่อแยก CSS/JS ของแต่ละโมดูลออกจากกันสมบูรณ์
@@ -5079,7 +5214,12 @@ function openModule(key){
   show('s-module');
   $('#modTitle').textContent=m.title; $('#modSub').textContent=m.sub;
   const body=$('#modBody');
-  [...body.children].forEach(c=>c.classList.remove('on'));
+  [...body.children].forEach(c=>{
+    if(c.classList.contains('on') && c!==frames[key] && !reduceMotion()){
+      c.classList.add('out'); c.classList.remove('on');
+      setTimeout(()=>c.classList.remove('out'),220);
+    } else c.classList.remove('on');
+  });
   body.querySelectorAll('.notice').forEach(n=>n.remove());
   if(frames[key]){ frames[key].classList.add('on'); return; }
 
