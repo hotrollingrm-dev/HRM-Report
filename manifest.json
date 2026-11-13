@@ -13,8 +13,8 @@
   "display_override": ["standalone", "minimal-ui"],
   "orientation": "portrait",
 
-  "background_color": "#1B1036",
-  "theme_color": "#1B1036",
+  "background_color": "#1E4532",
+  "theme_color": "#1E4532",
 
   "prefer_related_applications": false,
 
