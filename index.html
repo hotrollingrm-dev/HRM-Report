@@ -1481,6 +1481,114 @@ body:not(.at-home) .weather{visibility:hidden}
 .sp-bar i{background:repeating-linear-gradient(-45deg,#A3243A 0 8px,#FBF1DE 8px 16px);box-shadow:none}
 .sp-skip{color:#E2C88E}
 
+
+/* ============================================================
+   แผนงานรายวัน
+   ============================================================ */
+.quick{grid-template-columns:1fr 1fr 1fr;gap:8px}
+.qbtn{flex-direction:column;gap:5px;min-height:70px;padding:9px 6px 8px;border-radius:18px;font-size:12.5px;line-height:1.25;white-space:normal;text-align:center}
+.qbtn span{overflow:visible;text-overflow:clip}
+.qbtn.plan{background:#2F6B4B;box-shadow:0 4px 0 #173B2A,0 6px 12px rgba(15,42,29,.3)}
+.qbtn.plan:active{box-shadow:0 1px 0 #173B2A}
+.qbtn.plan .qi .ic{--i-navy:#1B3A2A;--i-cream:#FBF1DE;--i-custard:#E2A43B;--i-white:#fff;--i-red:#A3243A}
+
+body.at-plan .bottomnav{display:none}
+.plan-wrap{padding-top:4px}
+.pl-head{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:12px}
+.pl-date{display:flex;align-items:center;gap:10px;background:#FBF1DE;border-radius:14px;padding:6px 6px 6px 14px;box-shadow:var(--paper-sh)}
+.pl-date span{font-size:14px;font-weight:600;color:#5B6E61;flex:none}
+.pl-date input{flex:1;min-width:0;border:0;background:#fff;border-radius:10px;padding:10px 12px;font:600 16px var(--font);color:#1B3A2A}
+.pl-shift{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#173B2A;border-radius:16px;padding:5px}
+.pl-shift button{display:flex;flex-direction:column;align-items:center;gap:1px;padding:8px 6px;border-radius:12px;color:#DCE6DF;
+  transition:background-color 200ms ease,color 200ms ease}
+.pl-shift button b{font-size:15px;font-weight:800}
+.pl-shift button small{font-size:12px;opacity:.8}
+.pl-shift button[aria-selected="true"]{background:#FBF1DE;color:#A3243A;box-shadow:0 2px 0 rgba(0,0,0,.2)}
+.pl-shift button:active{transform:scale(.97)}
+.pl-sum{font-size:14px;color:#FBF1DE;margin:2px 2px 12px;line-height:1.6}
+.pl-sum b{font-size:18px;font-weight:800}
+.pl-sum .ot{color:#E2A43B;font-weight:600}
+
+/* ไทม์ไลน์ */
+.pl-tl{position:relative;background:#FBF1DE;border-radius:16px;box-shadow:var(--paper-sh);margin-bottom:14px;padding-top:6px}
+.pl-hr{position:absolute;left:0;right:0;height:0;border-top:1px solid #E6D6B6;margin-top:6px}
+.pl-hr time{position:absolute;left:10px;top:-9px;font-size:12.5px;font-weight:600;color:#5B6E61;background:#FBF1DE;padding-right:6px;font-variant-numeric:tabular-nums}
+.pl-hr.is-ot time{color:#A3243A}
+.pl-ot{position:absolute;left:58px;right:0;margin-top:6px;background:repeating-linear-gradient(-45deg,rgba(226,164,59,.13) 0 8px,rgba(226,164,59,.04) 8px 16px);
+  border-left:3px solid #E2A43B}
+.pl-ot span{position:absolute;right:8px;top:4px;font-size:11px;font-weight:800;color:#C4862A;letter-spacing:.3px}
+.pl-lanes{position:absolute;top:6px;left:60px;right:8px;bottom:0}
+.pl-task{position:absolute;text-align:left;overflow:hidden;
+  background:#2F6B4B;color:#FBF1DE;border-radius:10px;padding:5px 9px;display:flex;flex-direction:column;justify-content:flex-start;gap:1px;
+  box-shadow:0 2px 0 #173B2A;transition:transform 140ms cubic-bezier(.22,1,.36,1)}
+.pl-task b{font-size:14px;font-weight:800;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl-task span{font-size:12px;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+.pl-task.sm{flex-direction:row;align-items:center;gap:6px;padding:2px 8px}
+.pl-task.sm b{font-size:12.5px}.pl-task.sm span{font-size:11px}
+.pl-task.is-ot{background:#A3243A;box-shadow:0 2px 0 #6A1524}
+.pl-task:active{transform:scale(.98);transition-duration:0s}
+.pl-now{position:absolute;left:52px;right:0;height:0;border-top:2px solid #A3243A;margin-top:6px;z-index:2;pointer-events:none}
+.pl-now i{position:absolute;left:-5px;top:-6px;width:10px;height:10px;border-radius:50%;background:#A3243A}
+.pl-add{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:52px;border-radius:16px;
+  background:transparent;border:2px dashed #E2C88E;color:#FBF1DE;font:700 16px var(--font)}
+.pl-add b{font-size:22px;line-height:1;color:#E2A43B}
+.pl-add:active{transform:scale(.98);background:rgba(251,241,222,.06)}
+
+/* แถบปุ่มล่าง */
+.pl-bar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:auto 1fr;gap:10px;
+  padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,#1E4532 70%,rgba(30,69,50,0))}
+@media (min-width:520px){.pl-bar{left:50%;width:480px;transform:translateX(-50%)}}
+.pl-bar button{min-height:52px;border-radius:16px;font:700 15px var(--font);padding:0 16px;touch-action:manipulation;transition:transform 140ms cubic-bezier(.22,1,.36,1)}
+.pl-bar button:active{transform:scale(.97);transition-duration:0s}
+.pl-hist{background:#FBF1DE;color:#1B3A2A;box-shadow:0 3px 0 rgba(0,0,0,.25)}
+.pl-copy{background:#A3243A;color:#FBF1DE;box-shadow:0 4px 0 #6A1524}
+
+/* แผ่นล่าง (bottom sheet) */
+.pl-sheet-bg{position:fixed;inset:0;z-index:140;background:rgba(12,32,22,.55);opacity:0;transition:opacity 250ms cubic-bezier(.22,1,.36,1)}
+.pl-sheet-bg.on{opacity:1}
+.pl-sheet{position:fixed;left:0;right:0;bottom:0;z-index:141;max-height:88vh;overflow:auto;overscroll-behavior:contain;
+  background:#FBF1DE;color:#1B3A2A;border-radius:22px 22px 0 0;padding:8px 18px calc(18px + env(safe-area-inset-bottom,0px));
+  box-shadow:0 -10px 30px rgba(12,32,22,.35);transform:translateY(105%);transition:transform 320ms cubic-bezier(.32,.72,0,1);visibility:hidden}
+.pl-sheet[data-st="true"]{transform:translateY(0);visibility:visible}
+.pl-sheet[data-st="false"]{transition:transform 220ms cubic-bezier(.32,.72,0,1),visibility 0s 220ms}
+@media (min-width:520px){.pl-sheet{left:50%;width:480px;margin-left:-240px}}
+.pl-grip{width:40px;height:4px;border-radius:4px;background:#DCCBA8;margin:2px auto 10px}
+.pl-sheet h3{margin:0 0 12px;font:800 19px var(--font);color:#1B3A2A}
+.pl-f{margin-bottom:14px}
+.pl-f>label,.pl-time label{display:block;font-size:13px;font-weight:700;color:#5B6E61;margin-bottom:6px}
+.pl-f input,.pl-f textarea,.pl-f select{width:100%;box-sizing:border-box;border:1.5px solid #DCCBA8;background:#fff;border-radius:12px;padding:11px 12px;
+  font:400 16px var(--font);color:#1B3A2A}
+.pl-f input:focus,.pl-f textarea:focus,.pl-f select:focus{outline:0;border-color:#2F6B4B;box-shadow:0 0 0 3px rgba(47,107,75,.2)}
+.pl-time{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:end}
+.pl-time select{font-weight:600;font-variant-numeric:tabular-nums;appearance:auto}
+.pl-dur{grid-column:1/-1;font-size:13px;font-weight:600;color:#2F6B4B}
+.pl-dur.bad{color:#A3243A}
+.pl-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.pl-chip{padding:7px 12px;border-radius:999px;background:#fff;border:1.5px solid #DCCBA8;color:#1B3A2A;font:600 13.5px var(--font);
+  transition:background-color 150ms ease,color 150ms ease;touch-action:manipulation}
+.pl-chip.on{background:#2F6B4B;border-color:#2F6B4B;color:#FBF1DE}
+.pl-chip:active{transform:scale(.96)}
+.pl-err{min-height:1.2em;margin:-4px 0 8px;font-size:13.5px;font-weight:600;color:#A3243A}
+.pl-acts{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.pl-acts button{min-height:48px;padding:0 18px;border-radius:14px;font:700 15px var(--font);touch-action:manipulation}
+.pl-acts button:active{transform:scale(.97)}
+.pl-save{background:#2F6B4B;color:#FBF1DE;box-shadow:0 3px 0 #173B2A;flex:1}
+.pl-cancel{background:#F2E6CC;color:#1B3A2A}
+.pl-del{background:transparent;color:#A3243A;margin-right:auto;padding:0 6px}
+.pl-del[hidden]{display:none}
+@keyframes plShake{25%{transform:translateX(4px)}50%{transform:translateX(-2px)}75%{transform:translateX(2px)}}
+.pl-sheet.shake{animation:plShake 220ms cubic-bezier(.36,.07,.19,.97)}
+.pl-msg{margin:0 0 14px;white-space:pre-wrap;word-break:break-word;font:400 14.5px/1.7 var(--font);background:#F7EEDC;border-left:4px solid #A3243A;
+  border-radius:12px;padding:12px 14px;max-height:52vh;overflow:auto;-webkit-user-select:text;user-select:text}
+.pl-hlist{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;max-height:56vh;overflow:auto}
+.pl-hrow{display:flex;gap:6px;align-items:stretch}
+.pl-hopen{flex:1;min-width:0;text-align:left;background:#fff;border:1.5px solid #E6D6B6;border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.pl-hopen b{font-size:14.5px;color:#1B3A2A}
+.pl-hopen span{font-size:12.5px;color:#5B6E61;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl-hdel{width:44px;flex:none;border-radius:14px;background:#F2E6CC;color:#A3243A;font-size:22px}
+.pl-empty{margin:4px 0 14px;color:#5B6E61;font-size:14px;line-height:1.6}
+@media (prefers-reduced-motion:reduce){.pl-sheet,.pl-sheet-bg{transition:opacity 150ms ease!important}.pl-sheet[data-st="false"]{opacity:0}.pl-sheet.shake{animation:none}}
+
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001s!important;transition-duration:.001s!important}}
 </style>
 </head>
@@ -1550,6 +1658,7 @@ body:not(.at-home) .weather{visibility:hidden}
       <div class="quick" id="quickRow">
         <button class="qbtn" data-quick="bucket"><i class="qi" id="icBucket"></i><span>ขอถัง Bucket</span></button>
         <button class="qbtn" data-quick="scrap"><i class="qi" id="icPlate"></i><span>ขอเหล็กรอง Scrap</span></button>
+        <button class="qbtn plan" data-open-plan><i class="qi" id="icPlan"></i><span>แผนงานรายวัน</span></button>
       </div>
 
       <div class="sec-title sec-pill"><span>เลือกระบบที่ต้องการ</span></div>
@@ -1590,13 +1699,38 @@ body:not(.at-home) .weather{visibility:hidden}
           <span class="switch" id="swSplash" role="switch" tabindex="0"><i></i></span></div>
       </div>
       <div class="set-group">
-        <div class="set-row"><i class="ico" id="icTag"></i><span class="t">เวอร์ชัน</span><span class="v">3.0.0</span></div>
+        <div class="set-row"><i class="ico" id="icTag"></i><span class="t">เวอร์ชัน</span><span class="v">3.1.0</span></div>
         <button class="set-row" id="btnClearAct"><i class="ico" id="icHist"></i><span class="t">ล้างรายการล่าสุด</span><span class="v">›</span></button>
       </div>
       <div style="height:20px"></div>
     </div>
   </section>
 
+
+  <!-- ============ แผนงานรายวัน ============ -->
+  <section class="screen" id="s-plan">
+    <header class="appbar">
+      <button class="back" id="planBack" aria-label="ย้อนกลับ">←</button>
+      <div class="appbar-txt"><h1>แผนงานรายวัน</h1><p>RM TEAM · วางงานรายชั่วโมงของกะ</p></div>
+    </header>
+    <div class="wrap plan-wrap">
+      <div class="pl-head">
+        <label class="pl-date"><span>วันที่</span><input type="date" id="plDate"></label>
+        <div class="pl-shift" role="tablist" aria-label="เลือกกะ">
+          <button role="tab" data-shift="day" id="plDay"><b>กะเช้า</b><small>08:00–20:00</small></button>
+          <button role="tab" data-shift="night" id="plNight"><b>กะดึก</b><small>20:00–08:00</small></button>
+        </div>
+      </div>
+      <div class="pl-sum" id="plSum"></div>
+      <div class="pl-tl" id="plTl" aria-label="ไทม์ไลน์รายชั่วโมง"></div>
+      <button class="pl-add" id="plAdd"><b>+</b> เพิ่มงาน</button>
+      <div style="height:96px"></div>
+    </div>
+    <div class="pl-bar">
+      <button class="pl-hist" id="plHistBtn">ประวัติ</button>
+      <button class="pl-copy" id="plCopyBtn">ดูตัวอย่าง &amp; คัดลอกส่ง LINE</button>
+    </div>
+  </section>
   <div class="scrim" id="scrim"></div>
   <div class="fab-zone" id="fabZone">
     <div class="fab-menu" id="fabMenu"></div>
@@ -1606,6 +1740,47 @@ body:not(.at-home) .weather{visibility:hidden}
   <nav class="bottomnav" id="bnav"></nav>
 </div>
 <div class="toast" id="toast"></div>
+
+
+<!-- แผ่นเพิ่ม/แก้ไขงาน -->
+<div class="pl-sheet-bg" id="plSheetBg" hidden></div>
+<div class="pl-sheet" id="plSheet" role="dialog" aria-modal="true" aria-labelledby="plSheetT" data-st="false">
+  <div class="pl-grip"></div>
+  <h3 id="plSheetT">เพิ่มงาน</h3>
+  <div class="pl-f">
+    <label for="plName">งาน</label>
+    <div class="pl-chips" id="plNameChips"></div>
+    <input type="text" id="plName" placeholder="พิมพ์ชื่องาน เช่น 5ส. พื้นที่ Bucket" maxlength="80">
+  </div>
+  <div class="pl-f pl-time">
+    <div><label for="plStart">ตั้งแต่</label><select id="plStart"></select></div>
+    <div><label for="plEnd">ถึง</label><select id="plEnd"></select></div>
+    <span class="pl-dur" id="plDur"></span>
+  </div>
+  <div class="pl-f">
+    <label for="plArea">พื้นที่ / อุปกรณ์</label>
+    <div class="pl-chips" id="plAreaChips"></div>
+    <input type="text" id="plArea" placeholder="ไม่ระบุก็ได้" maxlength="60">
+  </div>
+  <div class="pl-f">
+    <label for="plNote">หมายเหตุ</label>
+    <textarea id="plNote" rows="2" placeholder="ไม่ระบุก็ได้" maxlength="200"></textarea>
+  </div>
+  <p class="pl-err" id="plErr" role="alert"></p>
+  <div class="pl-acts">
+    <button class="pl-del" id="plDel">ลบงานนี้</button>
+    <button class="pl-cancel" id="plCancel">ยกเลิก</button>
+    <button class="pl-save" id="plSave">บันทึก</button>
+  </div>
+</div>
+
+<!-- ตัวอย่างข้อความ / ประวัติ -->
+<div class="pl-sheet" id="plView" role="dialog" aria-modal="true" aria-labelledby="plViewT" data-st="false">
+  <div class="pl-grip"></div>
+  <h3 id="plViewT"></h3>
+  <div id="plViewBody"></div>
+  <div class="pl-acts" id="plViewActs"></div>
+</div>
 
 <!-- ถามความด่วน -->
 <div class="qpop" id="qAsk" hidden>
@@ -5788,20 +5963,22 @@ function go(route,push=true){
   current=route; closeFab();
   if(route==='home'){ show('s-home'); renderHome(); }
   else if(route==='settings'){ show('s-settings'); }
+  else if(route==='plan'){ show('s-plan'); renderPlan(); }
   else openModule(route);
   syncNav(); atHome();
-  $('#fabZone').style.display=(route==='settings')?'none':'';
+  $('#fabZone').style.display=(route==='settings'||route==='plan')?'none':'';
   window.scrollTo(0,0);
 }
 function back(){
   const prev=stack.pop()||'home'; current=prev;
   if(prev==='home'){ show('s-home'); renderHome(); }
   else if(prev==='settings') show('s-settings');
+  else if(prev==='plan'){ show('s-plan'); renderPlan(); }
   else openModule(prev);
   syncNav(); atHome();
-  $('#fabZone').style.display=(current==='settings')?'none':'';
+  $('#fabZone').style.display=(current==='settings'||current==='plan')?'none':'';
 }
-function atHome(){ document.body.classList.toggle('at-home', current==='home'); }
+function atHome(){ document.body.classList.toggle('at-home', current==='home'); document.body.classList.toggle('at-plan', current==='plan'); }
 let navIdx=-1, navSparkT=0;
 const reduceMotion=()=>window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 function syncNav(){
@@ -6073,6 +6250,217 @@ document.addEventListener('click',e=>{
   if(e.target.closest('#qShow') && !e.target.closest('.qmsg')){ closeQuick(); }
 });
 
+
+/* ============================================================
+   แผนงานรายวัน — วางงานบนไทม์ไลน์รายชั่วโมงของกะ
+   เวลาเก็บเป็น "นาทีนับจากต้นกะ" (0–720) ทีละ 15 นาที
+   กะเช้า 08:00–17:00 ปกติ · 17:00–20:00 OT
+   กะดึก 20:00–05:00 ปกติ · 05:00–08:00 OT
+   ============================================================ */
+const PL_SHIFT={
+  day:  {name:'กะเช้า', base:8*60,  ot:9*60, len:12*60, mark:'🌞'},
+  night:{name:'กะดึก',  base:20*60, ot:9*60, len:12*60, mark:'🌙'}
+};
+const PL_STEP=15, PL_HOUR_H=52;
+const PL_TASKS=['5ส.','PM ตามแผน','เปลี่ยนลูกรีด','ทำความสะอาดเครื่องจักร','ตรวจเช็คเครื่องจักร','KYT / ประชุมต้นกะ','อบรม','งานซ่อม','เตรียมงานผลิต','ส่งต่องาน / ส่งกะ'];
+const PL_AREAS=['Bucket','Table roll','Main motor','Coiler','Hydraulic','Furnace','Roll shop','ทั้งไลน์'];
+const KEY_PLAN='uacj.plan.drafts', KEY_PLAN_HIST='uacj.plan.hist';
+let plDrafts=store.read(KEY_PLAN,{});
+let plDate='', plShift='day', plEditId=null;
+
+const plKey=()=>plDate+'|'+plShift;
+const plTasks=()=>(plDrafts[plKey()]||[]);
+function plSetTasks(arr){ plDrafts[plKey()]=arr; 
+  // เก็บแบบร่างไว้แค่ 30 วันล่าสุด
+  const keys=Object.keys(plDrafts).sort().reverse(); keys.slice(60).forEach(k=>delete plDrafts[k]);
+  store.write(KEY_PLAN,plDrafts); }
+const pad2=n=>String(n).padStart(2,'0');
+function plClock(off){ const m=(PL_SHIFT[plShift].base+off)%1440; return pad2(Math.floor(m/60))+':'+pad2(m%60); }
+function plDurTxt(min){ const h=Math.floor(min/60), m=min%60; return (h?h+' ชม.':'')+(h&&m?' ':'')+(m?m+' นาที':''); }
+function plIsOT(off){ return off>=PL_SHIFT[plShift].ot; }
+function plLocalISO(d){ return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate()); }
+function plDefaults(){
+  // เลือกกะตามเวลาตอนนี้: 08:00–19:59 = กะเช้า, ที่เหลือ = กะดึก (ก่อน 08:00 นับเป็นกะดึกของเมื่อวาน)
+  const now=new Date(), h=now.getHours();
+  if(h>=8 && h<20){ plShift='day'; plDate=plLocalISO(now); }
+  else { plShift='night'; const d=new Date(now); if(h<8) d.setDate(d.getDate()-1); plDate=plLocalISO(d); }
+}
+function plThaiDate(iso){
+  try{ return new Date(iso+'T00:00:00').toLocaleDateString('th-TH',{weekday:'long',day:'numeric',month:'short',year:'numeric'}); }
+  catch(e){ return iso; }
+}
+function plSorted(){ return plTasks().map(t=>({...t})).sort((a,b)=>a.start-b.start||a.end-b.end); }
+
+/* จัดงานที่เวลาซ้อนกันให้อยู่คนละช่อง */
+function plLanes(list){
+  const out=[]; let cluster=[], clusterEnd=-1;
+  const flush=()=>{ const lanes=[]; cluster.forEach(t=>{ let i=lanes.findIndex(e=>e<=t.start); if(i<0){ i=lanes.length; lanes.push(0); } lanes[i]=t.end; t._lane=i; });
+    cluster.forEach(t=>{ t._lanes=lanes.length; out.push(t); }); cluster=[]; clusterEnd=-1; };
+  list.forEach(t=>{ if(cluster.length && t.start>=clusterEnd) flush(); cluster.push(t); clusterEnd=Math.max(clusterEnd,t.end); });
+  if(cluster.length) flush();
+  return out;
+}
+
+function renderPlan(){
+  if(!plDate) plDefaults();
+  $('#plDate').value=plDate;
+  $('#plDay').setAttribute('aria-selected',plShift==='day');
+  $('#plNight').setAttribute('aria-selected',plShift==='night');
+  const S=PL_SHIFT[plShift], list=plSorted();
+  // สรุป
+  const normal=list.filter(t=>!plIsOT(t.start)).length, ot=list.length-normal;
+  const busy=list.reduce((a,t)=>a+(t.end-t.start),0);
+  $('#plSum').innerHTML = list.length
+    ? `<b>${list.length}</b> งาน · รวม ${plDurTxt(busy)}${ot?` · <span class="ot">OT ${ot} งาน</span>`:''}`
+    : 'ยังไม่มีงานในกะนี้ · กด <b>+ เพิ่มงาน</b> เพื่อวางงานลงไทม์ไลน์';
+  // ไทม์ไลน์
+  let h='<div class="pl-ot" style="top:'+(S.ot/60*PL_HOUR_H)+'px;height:'+((S.len-S.ot)/60*PL_HOUR_H)+'px"><span>OT</span></div>';
+  for(let i=0;i<=S.len/60;i++){
+    h+=`<div class="pl-hr${i*60>=S.ot?' is-ot':''}" style="top:${i*PL_HOUR_H}px"><time>${plClock(i*60)}</time></div>`;
+  }
+  h+='<div class="pl-lanes">';
+  plLanes(list).forEach(t=>{
+    const top=t.start/60*PL_HOUR_H, ht=Math.max(22,(t.end-t.start)/60*PL_HOUR_H-3);
+    const w=100/t._lanes, l=t._lane*w;
+    const small=ht<44;
+    h+=`<button class="pl-task${plIsOT(t.start)?' is-ot':''}${small?' sm':''}" data-tid="${t.id}"
+      style="top:${top+1}px;height:${ht}px;left:calc(${l}% + 2px);width:calc(${w}% - 4px)">
+      <b>${esc(t.name)}</b><span>${plClock(t.start)}–${plClock(t.end)}${t.area?' · '+esc(t.area):''}</span></button>`;
+  });
+  h+='</div>';
+  // เส้นเวลาปัจจุบัน (เฉพาะกะที่กำลังเดินอยู่)
+  const now=new Date(); const nowMin=now.getHours()*60+now.getMinutes();
+  let off=(nowMin-S.base+1440)%1440; const shiftDay=plShift==='night'&&nowMin<S.base?(()=>{const d=new Date(now);d.setDate(d.getDate()-1);return plLocalISO(d)})():plLocalISO(now);
+  if(off<S.len && shiftDay===plDate) h+=`<div class="pl-now" style="top:${off/60*PL_HOUR_H}px"><i></i></div>`;
+  const tl=$('#plTl'); tl.style.height=(S.len/60*PL_HOUR_H+12)+'px'; tl.innerHTML=h;
+}
+
+/* ---------- แผ่นเพิ่ม/แก้ไขงาน ---------- */
+function plFillTimes(selStart,selEnd){
+  const S=PL_SHIFT[plShift]; let a='',b='';
+  for(let m=0;m<S.len;m+=PL_STEP) a+=`<option value="${m}"${m===selStart?' selected':''}>${plClock(m)}${plIsOT(m)?'  (OT)':''}</option>`;
+  for(let m=PL_STEP;m<=S.len;m+=PL_STEP) b+=`<option value="${m}"${m===selEnd?' selected':''}>${plClock(m)}${m>S.ot?'  (OT)':''}</option>`;
+  $('#plStart').innerHTML=a; $('#plEnd').innerHTML=b; plShowDur();
+}
+function plShowDur(){
+  const a=+$('#plStart').value, b=+$('#plEnd').value;
+  $('#plDur').textContent = b>a ? plDurTxt(b-a) : 'เวลาจบต้องหลังเวลาเริ่ม';
+  $('#plDur').classList.toggle('bad',!(b>a));
+}
+function plChips(box,list,input){
+  $(box).innerHTML=list.map(t=>`<button type="button" class="pl-chip" data-fill="${input}" data-v="${esc(t)}">${esc(t)}</button>`).join('');
+}
+function plSyncChips(){
+  $$('.pl-chip').forEach(c=>c.classList.toggle('on', $('#'+c.dataset.fill).value.trim()===c.dataset.v));
+}
+function plOpenSheet(id){
+  plEditId=id||null;
+  const t=id?plTasks().find(x=>x.id===id):null;
+  const last=plSorted().slice(-1)[0];
+  const st=t?t.start:(last?Math.min(last.end,PL_SHIFT[plShift].len-PL_STEP):30);
+  const en=t?t.end:Math.min(st+60,PL_SHIFT[plShift].len);
+  $('#plSheetT').textContent=t?'แก้ไขงาน':'เพิ่มงาน';
+  $('#plName').value=t?t.name:''; $('#plArea').value=t?(t.area||''):''; $('#plNote').value=t?(t.note||''):'';
+  $('#plErr').textContent=''; $('#plDel').hidden=!t;
+  plChips('#plNameChips',PL_TASKS,'plName'); plChips('#plAreaChips',PL_AREAS,'plArea'); plSyncChips();
+  plFillTimes(st,en); plSheet('#plSheet',true);
+}
+function plSheet(sel,open){
+  const el=$(sel), bg=$('#plSheetBg');
+  if(open){ ['#plSheet','#plView'].forEach(o=>{ if(o!==sel) $(o).dataset.st='false'; }); bg.hidden=false; requestAnimationFrame(()=>{ bg.classList.add('on'); el.dataset.st='true'; }); }
+  else { el.dataset.st='false'; if(!$$('.pl-sheet').some(x=>x.dataset.st==='true')){ bg.classList.remove('on'); setTimeout(()=>{ if(!bg.classList.contains('on')) bg.hidden=true; },300); } }
+}
+function plShake(msg){
+  const e=$('#plErr'); e.textContent=msg; const sh=$('#plSheet'); sh.classList.remove('shake'); void sh.offsetWidth; sh.classList.add('shake');
+}
+function plSave(){
+  const name=$('#plName').value.trim(), a=+$('#plStart').value, b=+$('#plEnd').value;
+  if(!name) return plShake('ใส่ชื่องานก่อนนะ');
+  if(!(b>a)) return plShake('เวลาจบต้องหลังเวลาเริ่ม');
+  const task={id:plEditId||('t'+Date.now().toString(36)),name,start:a,end:b,area:$('#plArea').value.trim(),note:$('#plNote').value.trim()};
+  const arr=plTasks().filter(x=>x.id!==task.id); arr.push(task); plSetTasks(arr);
+  plSheet('#plSheet',false); renderPlan(); buzz(); toast(plEditId?'แก้ไขงานแล้ว':'เพิ่มงานแล้ว');
+}
+function plDelete(){
+  if(!plEditId) return;
+  plSetTasks(plTasks().filter(x=>x.id!==plEditId)); plSheet('#plSheet',false); renderPlan(); buzz(); toast('ลบงานแล้ว');
+}
+
+/* ---------- ข้อความ LINE ---------- */
+function plMessage(){
+  const S=PL_SHIFT[plShift], list=plSorted();
+  const L=['📋 แผนงานประจำวัน RM TEAM','📅 '+plThaiDate(plDate),S.mark+' '+S.name+' '+plClock(0)+'–'+plClock(S.len),'━━━━━━━━━━━━━━━━'];
+  if(!list.length) L.push('— ยังไม่มีงาน —');
+  let otShown=false;
+  list.forEach(t=>{
+    if(plIsOT(t.start) && !otShown){ otShown=true; L.push('','⏱️ ช่วง OT '+plClock(S.ot)+'–'+plClock(S.len)); }
+    L.push('','⏰ '+plClock(t.start)+'–'+plClock(t.end)+'  '+t.name);
+    if(t.area) L.push('   📍 '+t.area);
+    if(t.note) L.push('   📝 '+t.note);
+  });
+  L.push('━━━━━━━━━━━━━━━━','รวม '+list.length+' งาน');
+  return L.join('\n');
+}
+function plSaveHistory(){
+  const list=plSorted(); if(!list.length) return;
+  const h=store.read(KEY_PLAN_HIST,[]).filter(x=>x.k!==plKey());
+  h.unshift({k:plKey(),date:plDate,shift:plShift,tasks:list.map(({_lane,_lanes,...t})=>t),t:Date.now()});
+  store.write(KEY_PLAN_HIST,h.slice(0,60));
+}
+function plOpenPreview(){
+  const txt=plMessage();
+  $('#plViewT').textContent='ตัวอย่างข้อความ';
+  $('#plViewBody').innerHTML='<pre class="pl-msg">'+esc(txt)+'</pre>';
+  $('#plViewActs').innerHTML='<button class="pl-cancel" data-plclose>ปิด</button><button class="pl-save" id="plDoCopy">คัดลอกส่ง LINE</button>';
+  plSheet('#plView',true);
+}
+function plOpenHistory(){
+  const h=store.read(KEY_PLAN_HIST,[]);
+  $('#plViewT').textContent='ประวัติแผนงาน';
+  $('#plViewBody').innerHTML = h.length ? '<div class="pl-hlist">'+h.map(x=>`
+    <div class="pl-hrow"><button class="pl-hopen" data-hk="${esc(x.k)}">
+      <b>${esc(plThaiDate(x.date))}</b><span>${PL_SHIFT[x.shift].name} · ${x.tasks.length} งาน · ${esc(x.tasks.slice(0,3).map(t=>t.name).join(', '))}${x.tasks.length>3?'…':''}</span></button>
+      <button class="pl-hdel" data-hdel="${esc(x.k)}" aria-label="ลบ">×</button></div>`).join('')+'</div>'
+    : '<p class="pl-empty">ยังไม่มีประวัติ · ระบบจะเก็บให้อัตโนมัติทุกครั้งที่กดคัดลอกส่ง LINE</p>';
+  $('#plViewActs').innerHTML='<button class="pl-cancel" data-plclose>ปิด</button>';
+  plSheet('#plView',true);
+}
+
+document.addEventListener('click',e=>{
+  const t=e.target;
+  if(t.closest('#plDay')||t.closest('#plNight')){ plShift=t.closest('[data-shift]').dataset.shift; renderPlan(); return; }
+  if(t.closest('#plAdd')){ buzz(); plOpenSheet(); return; }
+  const tb=t.closest('.pl-task'); if(tb){ buzz(); plOpenSheet(tb.dataset.tid); return; }
+  const ch=t.closest('.pl-chip'); if(ch){ $('#'+ch.dataset.fill).value=ch.dataset.v; plSyncChips(); return; }
+  if(t.closest('#plSave')){ plSave(); return; }
+  if(t.closest('#plDel')){ plDelete(); return; }
+  if(t.closest('#plCancel')){ plSheet('#plSheet',false); return; }
+  if(t.closest('[data-plclose]')){ plSheet('#plView',false); return; }
+  if(t.id==='plSheetBg'){ plSheet('#plSheet',false); plSheet('#plView',false); return; }
+  if(t.closest('#plCopyBtn')){ buzz(); plOpenPreview(); return; }
+  if(t.closest('#plHistBtn')){ buzz(); plOpenHistory(); return; }
+  if(t.closest('#plDoCopy')){
+    const txt=plMessage(); plSaveHistory();
+    copyText(txt).then(ok=>{ toast(ok?'Copy แล้วจร้า · บันทึกลงประวัติแล้ว':'คัดลอกไม่ได้ กดค้างที่ข้อความเพื่อคัดลอกนะ'); if(ok) plSheet('#plView',false); });
+    return;
+  }
+  const ho=t.closest('[data-hk]'); if(ho){
+    const x=store.read(KEY_PLAN_HIST,[]).find(r=>r.k===ho.dataset.hk); if(!x) return;
+    plDate=x.date; plShift=x.shift; plSetTasks(x.tasks.map(o=>({...o}))); plSheet('#plView',false); renderPlan(); toast('เปิดแผนงานจากประวัติแล้ว'); return;
+  }
+  const hd=t.closest('[data-hdel]'); if(hd){
+    store.write(KEY_PLAN_HIST,store.read(KEY_PLAN_HIST,[]).filter(r=>r.k!==hd.dataset.hdel)); plOpenHistory(); return;
+  }
+});
+document.addEventListener('change',e=>{
+  if(e.target.id==='plDate'){ plDate=e.target.value||plDate; renderPlan(); }
+  if(e.target.id==='plStart'){ const a=+e.target.value, b=$('#plEnd'); if(+b.value<=a) b.value=String(Math.min(a+60,PL_SHIFT[plShift].len)); plShowDur(); }
+  if(e.target.id==='plEnd') plShowDur();
+});
+document.addEventListener('input',e=>{ if(e.target.id==='plName'||e.target.id==='plArea') plSyncChips(); });
+document.addEventListener('animationend',e=>{ if(e.target.id==='plSheet') e.target.classList.remove('shake'); });
+setInterval(()=>{ if(current==='plan') renderPlan(); },60000);
+
 /* ---------- EVENTS ---------- */
 document.addEventListener('click',e=>{
   const open=e.target.closest('[data-open]'); if(open){ buzz(); go(open.dataset.open); return; }
@@ -6080,7 +6468,8 @@ document.addEventListener('click',e=>{
   if(e.target.closest('#gear')){ buzz(); go('settings'); return; }
   if(e.target.closest('#fab')){ toggleFab(); return; }
   if(e.target.closest('#scrim')){ closeFab(); return; }
-  if(e.target.closest('#modBack')||e.target.closest('#setBack')){ buzz(); back(); return; }
+  if(e.target.closest('#modBack')||e.target.closest('#setBack')||e.target.closest('#planBack')){ buzz(); back(); return; }
+  if(e.target.closest('[data-open-plan]')){ buzz(); go('plan'); return; }
   if(e.target.closest('#feedClear')||e.target.closest('#btnClearAct')){
     store.write(KEY_ACT,[]); renderHome(); toast('ล้างรายการแล้ว'); return; }
 });
@@ -6170,7 +6559,7 @@ window.addEventListener('popstate',()=>{ history.pushState({app:1},'');
 function paintIcons(){
   const put=(id,n)=>{ const el=document.getElementById(id); if(el) el.innerHTML=ico(n); };
   put('icGear','settings'); put('btnInstallNo','close'); put('icPlus','plus'); put('icHaptic','haptic');
-  put('icTag','tag'); put('icHist','history'); put('icWave','spark'); put('icOff','offline'); put('icSplash','spark'); put('icBucket','bucket'); put('icPlate','plate'); put('qAskX','close');
+  put('icTag','tag'); put('icHist','history'); put('icWave','spark'); put('icOff','offline'); put('icSplash','spark'); put('icBucket','bucket'); put('icPlate','plate'); put('icPlan','calendar'); put('qAskX','close');
   const html=(id,h)=>{ const el=document.getElementById(id); if(el) el.innerHTML=h; };
   html('logoHat',HAT_SVG); html('spHat',HAT_SVG); html('heroScene',HERO_SVG);
 }
