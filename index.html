@@ -1587,6 +1587,14 @@ body.at-plan .bottomnav{display:none}
 .pl-hopen span{font-size:12.5px;color:#5B6E61;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pl-hdel{width:44px;flex:none;border-radius:14px;background:#F2E6CC;color:#A3243A;font-size:22px}
 .pl-empty{margin:4px 0 14px;color:#5B6E61;font-size:14px;line-height:1.6}
+
+.pl-mode{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:#F2E6CC;border-radius:14px;padding:4px;margin-bottom:12px}
+.pl-mode button{min-height:42px;border-radius:11px;font:700 14.5px var(--font);color:#5B6E61;transition:background-color 200ms ease,color 200ms ease}
+.pl-mode button[aria-selected="true"]{background:#FFFBF2;color:#A3243A;box-shadow:0 2px 0 rgba(15,42,29,.15)}
+.pl-imgwrap{overflow-x:auto;overflow-y:hidden;border-radius:12px;background:#F2E6CC;margin-bottom:6px;-webkit-overflow-scrolling:touch}
+.pl-imgwrap img{display:block;height:min(46vh,420px);width:auto;max-width:none}
+.pl-wait{margin:0;padding:40px 16px;text-align:center;color:#5B6E61;font-size:14px}
+.pl-hint{margin:6px 0 12px;font-size:12.5px;color:#5B6E61;text-align:center}
 @media (prefers-reduced-motion:reduce){.pl-sheet,.pl-sheet-bg{transition:opacity 150ms ease!important}.pl-sheet[data-st="false"]{opacity:0}.pl-sheet.shake{animation:none}}
 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001s!important;transition-duration:.001s!important}}
@@ -1699,7 +1707,7 @@ body.at-plan .bottomnav{display:none}
           <span class="switch" id="swSplash" role="switch" tabindex="0"><i></i></span></div>
       </div>
       <div class="set-group">
-        <div class="set-row"><i class="ico" id="icTag"></i><span class="t">เวอร์ชัน</span><span class="v">3.1.0</span></div>
+        <div class="set-row"><i class="ico" id="icTag"></i><span class="t">เวอร์ชัน</span><span class="v">3.2.0</span></div>
         <button class="set-row" id="btnClearAct"><i class="ico" id="icHist"></i><span class="t">ล้างรายการล่าสุด</span><span class="v">›</span></button>
       </div>
       <div style="height:20px"></div>
@@ -1728,7 +1736,7 @@ body.at-plan .bottomnav{display:none}
     </div>
     <div class="pl-bar">
       <button class="pl-hist" id="plHistBtn">ประวัติ</button>
-      <button class="pl-copy" id="plCopyBtn">ดูตัวอย่าง &amp; คัดลอกส่ง LINE</button>
+      <button class="pl-copy" id="plCopyBtn">ดูตัวอย่าง &amp; ส่ง LINE</button>
     </div>
   </section>
   <div class="scrim" id="scrim"></div>
@@ -6407,12 +6415,111 @@ function plSaveHistory(){
   h.unshift({k:plKey(),date:plDate,shift:plShift,tasks:list.map(({_lane,_lanes,...t})=>t),t:Date.now()});
   store.write(KEY_PLAN_HIST,h.slice(0,60));
 }
+/* ---------- รูปไทม์ไลน์แนวนอน (PNG) ---------- */
+const PL_COLORS=['#2F6B4B','#A3243A','#3E7CB1','#E2A43B','#7A4A8C','#2A8C82','#D9662B','#8A5A34'];
+let plMode=store.read('uacj.plan.mode','text'), plImgBlob=null, plImgUrl='';
+function plRoundRect(c,x,y,w,h,r){ c.beginPath(); c.moveTo(x+r,y); c.arcTo(x+w,y,x+w,y+h,r); c.arcTo(x+w,y+h,x,y+h,r); c.arcTo(x,y+h,x,y,r); c.arcTo(x,y,x+w,y,r); c.closePath(); }
+function plFit(c,txt,maxW){ if(c.measureText(txt).width<=maxW) return txt; let t=txt; while(t.length>1 && c.measureText(t+'…').width>maxW) t=t.slice(0,-1); return t.length>1?t+'…':''; }
+function plTextOn(hex){ const n=parseInt(hex.slice(1),16), r=n>>16, g=n>>8&255, b=n&255; return (r*299+g*587+b*114)/1000>160?'#1B3A2A':'#FFFBF2'; }
+async function plRenderImage(){
+  try{ await document.fonts.load('800 30px "Noto Sans Thai Looped"'); await document.fonts.load('400 20px "Noto Sans Thai Looped"'); }catch(e){}
+  const F='"Noto Sans Thai Looped",sans-serif';
+  const S=PL_SHIFT[plShift], list=plSorted(), hours=S.len/60;
+  const PAD=48, LEFT=PAD, HW=128, TLW=hours*HW, W=LEFT+TLW+PAD;
+  const lanes=plLanes(list.map(t=>({...t}))); const nLanes=Math.max(1,...lanes.map(t=>t._lane+1));
+  // ใช้ลำดับแถวแบบ global (ไม่ใช่ต่อกลุ่ม) ให้แท่งไม่ทับกัน
+  const rows=[]; lanes.sort((a,b)=>a.start-b.start).forEach(t=>{ let i=rows.findIndex(e=>e<=t.start); if(i<0){i=rows.length;rows.push(0);} rows[i]=t.end; t._row=i; });
+  lanes.forEach((t,i)=>t._color=PL_COLORS[i%PL_COLORS.length]);
+  const BAR=74, GAP=14, HEAD=150, AXIS=46, tlTop=HEAD+AXIS+18, tlH=Math.max(1,rows.length)*(BAR+GAP)+GAP;
+  const LROW=58, legendTop=tlTop+tlH+56, H=legendTop+Math.max(1,lanes.length)*LROW+90;
+  const cv=document.createElement('canvas'); const sc=2; cv.width=W*sc; cv.height=H*sc; const c=cv.getContext('2d'); c.scale(sc,sc);
+  // พื้น
+  c.fillStyle='#FBF1DE'; c.fillRect(0,0,W,H);
+  c.fillStyle='#1E4532'; c.fillRect(0,0,W,HEAD);
+  c.fillStyle='#E2A43B'; c.fillRect(0,HEAD-8,W,8);
+  c.fillStyle='#FBF1DE'; c.font=`800 46px ${F}`; c.textBaseline='alphabetic'; c.fillText('แผนงานประจำวัน · RM TEAM',PAD,72);
+  c.fillStyle='#E2A43B'; c.font=`600 26px ${F}`; c.fillText(plThaiDate(plDate)+'   ·   '+S.name+' '+plClock(0)+'–'+plClock(S.len),PAD,116);
+  const busy=list.reduce((a,t)=>a+(t.end-t.start),0);
+  c.textAlign='right'; c.fillStyle='#FBF1DE'; c.font=`800 40px ${F}`; c.fillText(list.length+' งาน',W-PAD,72);
+  c.fillStyle='#DCE6DF'; c.font=`400 22px ${F}`; c.fillText('รวม '+(plDurTxt(busy)||'0 นาที'),W-PAD,112); c.textAlign='left';
+  // แกนเวลา + ช่วง OT
+  const x=m=>LEFT+m/60*HW;
+  c.fillStyle='rgba(226,164,59,.16)'; c.fillRect(x(S.ot),tlTop-10,x(S.len)-x(S.ot),tlH+10);
+  c.save(); c.beginPath(); c.rect(x(S.ot),tlTop-10,x(S.len)-x(S.ot),tlH+10); c.clip(); c.strokeStyle='rgba(226,164,59,.28)'; c.lineWidth=6;
+  for(let i=-tlH;i<x(S.len)-x(S.ot)+tlH;i+=22){ c.beginPath(); c.moveTo(x(S.ot)+i,tlTop-10); c.lineTo(x(S.ot)+i+tlH+10,tlTop+tlH); c.stroke(); } c.restore();
+  c.fillStyle='#C4862A'; c.font=`800 20px ${F}`; c.textAlign='right'; c.fillText('OT',x(S.len)-10,tlTop+14); c.textAlign='left';
+  for(let i=0;i<=hours;i++){
+    const xx=x(i*60), ot=i*60>=S.ot;
+    c.strokeStyle=i%1===0?'#E6D6B6':'#EFE3CB'; c.lineWidth=i===0||i===hours?2:1.2;
+    c.beginPath(); c.moveTo(xx,HEAD+AXIS); c.lineTo(xx,tlTop+tlH); c.stroke();
+    c.fillStyle=ot?'#A3243A':'#1B3A2A'; c.font=`700 22px ${F}`; c.textAlign=i===0?'left':(i===hours?'right':'center');
+    c.fillText(plClock(i*60),xx,HEAD+AXIS-4);
+  }
+  c.textAlign='left';
+  // แท่งงาน
+  if(!lanes.length){ c.fillStyle='#8C9A8F'; c.font=`600 26px ${F}`; c.fillText('ยังไม่มีงานในกะนี้',LEFT+20,tlTop+BAR/2+10); }
+  lanes.forEach(t=>{
+    const bx=x(t.start)+2, bw=Math.max(8,x(t.end)-x(t.start)-4), by=tlTop+GAP/2+t._row*(BAR+GAP);
+    c.fillStyle='rgba(15,42,29,.22)'; plRoundRect(c,bx+2,by+4,bw,BAR,14); c.fill();
+    c.fillStyle=t._color; plRoundRect(c,bx,by,bw,BAR,14); c.fill();
+    const tc=plTextOn(t._color); c.fillStyle=tc;
+    c.font=`800 24px ${F}`; c.fillText(plFit(c,t.name,bw-24),bx+12,by+33);
+    c.font=`400 18px ${F}`; c.globalAlpha=.9; c.fillText(plFit(c,plClock(t.start)+'–'+plClock(t.end)+(t.area?'  ·  '+t.area:''),bw-24),bx+12,by+59); c.globalAlpha=1;
+  });
+  // รายละเอียดใต้ไทม์ไลน์
+  c.fillStyle='#1B3A2A'; c.font=`800 28px ${F}`; c.fillText('รายละเอียดงาน',PAD,legendTop-16);
+  lanes.forEach((t,i)=>{
+    const y=legendTop+i*LROW;
+    if(i%2===0){ c.fillStyle='#F4E8D0'; plRoundRect(c,PAD-12,y,W-PAD*2+24,LROW-6,12); c.fill(); }
+    c.fillStyle=t._color; plRoundRect(c,PAD,y+14,24,24,6); c.fill();
+    c.fillStyle='#1B3A2A'; c.font=`700 22px ${F}`; c.fillText(plClock(t.start)+'–'+plClock(t.end),PAD+40,y+35);
+    c.font=`800 22px ${F}`; c.fillText(plFit(c,t.name,420),PAD+210,y+35);
+    c.font=`400 20px ${F}`; c.fillStyle='#5B6E61';
+    const rest=[t.area?'พื้นที่: '+t.area:'',t.note?'หมายเหตุ: '+t.note:''].filter(Boolean).join('   ·   ');
+    c.fillText(plFit(c,rest+(plIsOT(t.start)?'   ·   OT':''),W-PAD*2-660),PAD+650,y+35);
+  });
+  c.fillStyle='#8C9A8F'; c.font=`400 18px ${F}`; c.fillText('HRM Trouble Report · UACJ (Thailand) Hot Rolling',PAD,H-36);
+  return new Promise(res=>cv.toBlob(b=>res(b),'image/png'));
+}
+function plFileName(){ return 'แผนงาน_'+plDate+'_'+(plShift==='day'?'กะเช้า':'กะดึก')+'.png'; }
+async function plShowMode(){
+  $$('.pl-mode button').forEach(b=>b.setAttribute('aria-selected',b.dataset.mode===plMode));
+  const body=$('#plViewBody .pl-mbody'), acts=$('#plViewActs');
+  if(plMode==='text'){
+    body.innerHTML='<pre class="pl-msg">'+esc(plMessage())+'</pre>';
+    acts.innerHTML='<button class="pl-cancel" data-plclose>ปิด</button><button class="pl-save" id="plDoCopy">คัดลอกส่ง LINE</button>';
+    return;
+  }
+  body.innerHTML='<div class="pl-imgwrap"><p class="pl-wait">กำลังสร้างรูป…</p></div>';
+  acts.innerHTML='<button class="pl-cancel" data-plclose>ปิด</button><button class="pl-cancel" id="plImgSave">บันทึกรูป</button><button class="pl-save" id="plImgShare">แชร์ / ส่ง LINE</button>';
+  plImgBlob=await plRenderImage();
+  if(plImgUrl) URL.revokeObjectURL(plImgUrl);
+  plImgUrl=URL.createObjectURL(plImgBlob);
+  if(plMode!=='image') return;
+  $('#plViewBody .pl-imgwrap').innerHTML=`<img src="${plImgUrl}" alt="ไทม์ไลน์แผนงาน">`;
+  $('#plViewBody .pl-mbody').insertAdjacentHTML('beforeend','<p class="pl-hint">เลื่อนซ้าย–ขวาเพื่อดูทั้งกะ · ส่งไปจะได้รูปเต็มความละเอียด</p>');
+}
 function plOpenPreview(){
-  const txt=plMessage();
-  $('#plViewT').textContent='ตัวอย่างข้อความ';
-  $('#plViewBody').innerHTML='<pre class="pl-msg">'+esc(txt)+'</pre>';
-  $('#plViewActs').innerHTML='<button class="pl-cancel" data-plclose>ปิด</button><button class="pl-save" id="plDoCopy">คัดลอกส่ง LINE</button>';
-  plSheet('#plView',true);
+  $('#plViewT').textContent='ตัวอย่างก่อนส่ง';
+  $('#plViewBody').innerHTML='<div class="pl-mode" role="tablist"><button role="tab" data-mode="text">แบบข้อความ</button><button role="tab" data-mode="image">แบบรูปภาพ</button></div><div class="pl-mbody"></div>';
+  plSheet('#plView',true); plShowMode();
+}
+async function plShareImage(){
+  if(!plImgBlob) return;
+  plSaveHistory();
+  const file=new File([plImgBlob],plFileName(),{type:'image/png'});
+  try{
+    if(navigator.canShare && navigator.canShare({files:[file]})){ await navigator.share({files:[file],title:'แผนงานประจำวัน'}); toast('ส่งรูปแล้ว · บันทึกลงประวัติแล้ว'); return; }
+  }catch(e){ if(e&&e.name==='AbortError') return; }
+  try{
+    if(navigator.clipboard && window.ClipboardItem){ await navigator.clipboard.write([new ClipboardItem({'image/png':plImgBlob})]); toast('คัดลอกรูปแล้ว ไปวางใน LINE ได้เลย'); return; }
+  }catch(e){}
+  plDownloadImage();
+}
+function plDownloadImage(){
+  if(!plImgBlob) return; plSaveHistory();
+  const a=document.createElement('a'); a.href=plImgUrl; a.download=plFileName(); document.body.appendChild(a); a.click(); a.remove();
+  toast('บันทึกรูปแล้ว · ดูได้ในโฟลเดอร์ดาวน์โหลด');
 }
 function plOpenHistory(){
   const h=store.read(KEY_PLAN_HIST,[]);
@@ -6439,6 +6546,9 @@ document.addEventListener('click',e=>{
   if(t.id==='plSheetBg'){ plSheet('#plSheet',false); plSheet('#plView',false); return; }
   if(t.closest('#plCopyBtn')){ buzz(); plOpenPreview(); return; }
   if(t.closest('#plHistBtn')){ buzz(); plOpenHistory(); return; }
+  const md=t.closest('.pl-mode [data-mode]'); if(md){ plMode=md.dataset.mode; store.write('uacj.plan.mode',plMode); plShowMode(); return; }
+  if(t.closest('#plImgShare')){ buzz(); plShareImage(); return; }
+  if(t.closest('#plImgSave')){ buzz(); plDownloadImage(); return; }
   if(t.closest('#plDoCopy')){
     const txt=plMessage(); plSaveHistory();
     copyText(txt).then(ok=>{ toast(ok?'Copy แล้วจร้า · บันทึกลงประวัติแล้ว':'คัดลอกไม่ได้ กดค้างที่ข้อความเพื่อคัดลอกนะ'); if(ok) plSheet('#plView',false); });
