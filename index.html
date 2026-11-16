@@ -1597,6 +1597,71 @@ body.at-plan .bottomnav{display:none}
 .pl-hint{margin:6px 0 12px;font-size:12.5px;color:#5B6E61;text-align:center}
 @media (prefers-reduced-motion:reduce){.pl-sheet,.pl-sheet-bg{transition:opacity 150ms ease!important}.pl-sheet[data-st="false"]{opacity:0}.pl-sheet.shake{animation:none}}
 
+
+/* ===== โหมดรายงาน + Breakdown ===== */
+.pl-kind{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;margin:4px 0 12px;background:#173B2A;border-radius:999px}
+.pl-kind button{border:0;border-radius:999px;padding:11px 8px;font:600 15px/1.2 var(--font);color:#DCCBA8;background:transparent;transition:background .2s,color .2s,transform .14s}
+.pl-kind button:active{transform:scale(.97)}
+.pl-kind button[aria-selected="true"]{background:#FBF1DE;color:#1B3A2A}
+#s-plan.is-bd .pl-kind button[aria-selected="true"]{background:#A3243A;color:#FFF4EC}
+.pl-titlef{display:block;margin:0 0 14px}
+.pl-titlef span{display:block;font-size:13px;color:#DCCBA8;margin:0 0 6px 4px}
+.pl-titlef input{width:100%;box-sizing:border-box;border:0;border-radius:14px;padding:13px 14px;font:800 17px/1.3 var(--font);color:#1B3A2A;background:#FBF1DE;box-shadow:var(--paper-sh)}
+.pl-titlef input:focus{outline:3px solid #E2A43B;outline-offset:2px}
+/* หน้าจอเครื่องพัง: พื้นแดงเลือดหมู */
+#s-plan.is-bd{min-height:100vh;background-color:#4A0E16;background-image:repeating-linear-gradient(135deg,rgba(0,0,0,.08) 0 14px,transparent 14px 28px)}
+#s-plan.is-bd .appbar{background:#7A1420}
+#s-plan.is-bd .pl-titlef span{color:#F5C9C9}
+#s-plan.is-bd .pl-kind{background:#2E070D}
+#s-plan.is-bd .pl-kind button{color:#F5C9C9}
+#s-plan.is-bd .pl-sum{color:#F5C9C9}
+#s-plan.is-bd .pl-bar{background:linear-gradient(to top,#4A0E16 70%,rgba(74,14,22,0))}
+#s-plan.is-bd .pl-bar #plCopyBtn{background:#A3243A}
+#s-plan.is-bd .pl-titlef input:focus{outline-color:#F2C14E}
+.bd-card{background:#FBF1DE;border-radius:18px;padding:14px 14px 12px;margin:0 0 12px;box-shadow:0 3px 0 rgba(30,4,8,.35),0 8px 18px rgba(30,4,8,.35);color:#2A1416}
+.bd-card h3{margin:0 0 10px;font-size:17px;font-weight:800;color:#7A1420}
+.bd-card .pl-f{margin:0 0 10px}
+.bd-card .pl-f label{color:#6E4A44}
+.bd-card input,.bd-card textarea{width:100%;box-sizing:border-box;border:1.5px solid #E2C6B6;border-radius:12px;padding:11px 12px;font:600 16px/1.4 var(--font);color:#2A1416;background:#fff}
+.bd-card input:focus,.bd-card textarea:focus{outline:3px solid #F2C14E;outline-offset:1px;border-color:#A3243A}
+.bd-times{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.bd-times>div{min-width:0}
+.bd-times input{font-size:15px;padding:10px 8px;min-height:46px;min-width:0;max-width:100%}
+@media (max-width:400px){.bd-times{grid-template-columns:1fr}}
+.bd-down{margin:2px 0 8px;font-size:15px;color:#6E4A44}
+.bd-down b{color:#A3243A;font-size:18px}
+.bd-down .bad{color:#A3243A;font-weight:700}
+.bd-reset{border:0;background:transparent;color:#7A1420;font:600 14px/1 var(--font);text-decoration:underline;padding:8px 0;min-height:40px}
+.bd-help{margin:-4px 0 10px;font-size:14px;color:#6E4A44}
+.bd-lanepick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 10px}
+.bd-lpick{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:60px;word-break:keep-all;padding:6px;border-radius:14px;border:2px solid #E2C6B6;background:#fff;color:#6E4A44;font:700 14px/1.2 var(--font);text-align:center;transition:transform .14s,background .2s,border-color .2s}
+.bd-lpick:active{transform:scale(.97)}
+.bd-lpick i{flex:none;width:16px;height:16px;border-radius:5px;border:2px solid var(--lc);background:transparent;transition:background .2s}
+.bd-lpick.on{border-color:var(--lc);background:color-mix(in srgb,var(--lc) 14%,#fff);color:#2A1416}
+.bd-lpick.on i{background:var(--lc)}
+.bd-owner{display:block;margin:0 0 8px;padding-left:10px;border-left:5px solid var(--lc)}
+.bd-owner span{display:block;font-size:13px;color:#6E4A44;margin:0 0 4px}
+.bd-tl{background:#FBF1DE}
+.bd-lh{position:absolute;left:60px;right:8px;top:6px;display:flex;gap:4px}
+.bd-lh span{flex:1;min-width:0;text-align:center;font:800 12.5px/1.2 var(--font);padding:7px 4px;border-radius:9px;background:var(--lc);color:#fff;word-break:keep-all}
+.bd-lh span[style*="E2A43B"]{color:#2A1416}
+.pl-task.bd-task{background:var(--lc);color:#fff;box-shadow:0 2px 0 rgba(40,6,10,.45)}
+.pl-task.bd-task[style*="E2A43B"]{color:#2A1416}
+.pl-hr.is-day{border-top:2px solid #C9A0A0}
+.pl-hr time small{display:block;font-size:10px;color:#A3243A;font-weight:600}
+.bd-mark{position:absolute;left:52px;right:0;height:0;border-top:2.5px dashed;z-index:3;pointer-events:none}
+.bd-mark.stop{border-color:#A3243A}.bd-mark.run{border-color:#2F6B4B}
+.bd-mark span{position:absolute;right:6px;top:-12px;font:800 11px/1 var(--font);padding:5px 8px;border-radius:7px;color:#fff;background:#A3243A}
+.bd-mark.run span{background:#2F6B4B}
+.bd-adds{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:10px}
+.pl-add.bd-add{margin:0;background:var(--lc);color:#fff;border-color:transparent}
+.pl-add.bd-add[style*="E2A43B"]{color:#2A1416}
+.bd-lanesel{display:flex;gap:6px;flex-wrap:wrap}
+.bd-lopt{flex:1;min-width:90px;min-height:46px;border-radius:12px;border:2px solid var(--lc);background:#fff;color:#2A1416;font:700 14px/1.2 var(--font);transition:background .2s,transform .14s}
+.bd-lopt:active{transform:scale(.97)}
+.bd-lopt.on{background:var(--lc);color:#fff}
+.bd-lopt.on[style*="E2A43B"]{color:#2A1416}
+.pl-hopen.is-bd b{color:#A3243A}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001s!important;transition-duration:.001s!important}}
 </style>
 </head>
@@ -1707,7 +1772,7 @@ body.at-plan .bottomnav{display:none}
           <span class="switch" id="swSplash" role="switch" tabindex="0"><i></i></span></div>
       </div>
       <div class="set-group">
-        <div class="set-row"><i class="ico" id="icTag"></i><span class="t">เวอร์ชัน</span><span class="v">3.2.1</span></div>
+        <div class="set-row"><i class="ico" id="icTag"></i><span class="t">เวอร์ชัน</span><span class="v">3.3.0</span></div>
         <button class="set-row" id="btnClearAct"><i class="ico" id="icHist"></i><span class="t">ล้างรายการล่าสุด</span><span class="v">›</span></button>
       </div>
       <div style="height:20px"></div>
@@ -1722,6 +1787,12 @@ body.at-plan .bottomnav{display:none}
       <div class="appbar-txt"><h1>แผนงานรายวัน</h1><p>RM TEAM · วางงานรายชั่วโมงของกะ</p></div>
     </header>
     <div class="wrap plan-wrap">
+      <div class="pl-kind" role="tablist" aria-label="ประเภทรายงาน">
+        <button role="tab" data-kind="normal" id="plKindN">แผนงานปกติ</button>
+        <button role="tab" data-kind="bd" id="plKindB">เครื่องพัง (Breakdown)</button>
+      </div>
+      <label class="pl-titlef"><span>หัวข้อรายงาน</span><input type="text" id="plTitle" maxlength="70" placeholder="หัวข้อรายงาน"></label>
+      <div id="plNormal">
       <div class="pl-head">
         <label class="pl-date"><span>วันที่</span><input type="date" id="plDate"></label>
         <div class="pl-shift" role="tablist" aria-label="เลือกกะ">
@@ -1732,6 +1803,34 @@ body.at-plan .bottomnav{display:none}
       <div class="pl-sum" id="plSum"></div>
       <div class="pl-tl" id="plTl" aria-label="ไทม์ไลน์รายชั่วโมง"></div>
       <button class="pl-add" id="plAdd"><b>+</b> เพิ่มงาน</button>
+      </div>
+
+      <!-- โหมดเครื่องพัง -->
+      <div id="plBd" hidden>
+        <div class="bd-card">
+          <h3>ข้อมูลเครื่องพัง</h3>
+          <div class="pl-f"><label for="bdMachine">เครื่อง / อุปกรณ์ที่พัง</label>
+            <div class="pl-chips" id="bdMachineChips"></div>
+            <input type="text" id="bdMachine" maxlength="60" placeholder="เช่น Main motor, Coiler"></div>
+          <div class="pl-f"><label for="bdSymptom">อาการ / สาเหตุเบื้องต้น</label>
+            <textarea id="bdSymptom" rows="2" maxlength="240" placeholder="เช่น มอเตอร์มีเสียงดังผิดปกติ ตัด Overload"></textarea></div>
+          <div class="pl-f bd-times">
+            <div><label for="bdStop">เครื่องหยุด</label><input type="datetime-local" id="bdStop" step="900"></div>
+            <div><label for="bdRestart">คาดว่าเดินได้</label><input type="datetime-local" id="bdRestart" step="900"></div>
+          </div>
+          <p class="bd-down" id="bdDown"></p>
+          <button type="button" class="bd-reset" id="bdReset">เริ่มรายงานเครื่องพังใหม่</button>
+        </div>
+        <div class="bd-card">
+          <h3>ฝ่ายที่เข้าทำงาน</h3>
+          <p class="bd-help">เลือกฝ่ายที่มีงาน แล้วกรอกผู้รับผิดชอบและงานของแต่ละฝ่าย</p>
+          <div class="bd-lanepick" id="bdLanePick"></div>
+          <div id="bdOwners"></div>
+        </div>
+        <div class="pl-sum" id="bdSum"></div>
+        <div class="pl-tl bd-tl" id="bdTl" aria-label="ไทม์ไลน์งานซ่อม"></div>
+        <div class="bd-adds" id="bdAdds"></div>
+      </div>
       <div style="height:96px"></div>
     </div>
     <div class="pl-bar">
@@ -1755,6 +1854,10 @@ body.at-plan .bottomnav{display:none}
 <div class="pl-sheet" id="plSheet" role="dialog" aria-modal="true" aria-labelledby="plSheetT" data-st="false">
   <div class="pl-grip"></div>
   <h3 id="plSheetT">เพิ่มงาน</h3>
+  <div class="pl-f" id="plLaneF" hidden>
+    <label>ฝ่าย</label>
+    <div class="bd-lanesel" id="plLaneSel"></div>
+  </div>
   <div class="pl-f">
     <label for="plName">งาน</label>
     <div class="pl-chips" id="plNameChips"></div>
@@ -1765,7 +1868,7 @@ body.at-plan .bottomnav{display:none}
     <div><label for="plEnd">ถึง</label><select id="plEnd"></select></div>
     <span class="pl-dur" id="plDur"></span>
   </div>
-  <div class="pl-f">
+  <div class="pl-f" id="plAreaF">
     <label for="plArea">พื้นที่ / อุปกรณ์</label>
     <div class="pl-chips" id="plAreaChips"></div>
     <input type="text" id="plArea" placeholder="ไม่ระบุก็ได้" maxlength="60">
@@ -6275,6 +6378,42 @@ const PL_AREAS=['Bucket','Table roll','Main motor','Coiler','Hydraulic','Furnace
 const KEY_PLAN='uacj.plan.drafts', KEY_PLAN_HIST='uacj.plan.hist';
 let plDrafts=store.read(KEY_PLAN,{});
 let plDate='', plShift='day', plEditId=null;
+/* ---------- โหมดรายงาน: แผนงานปกติ / เครื่องพัง (Breakdown) ---------- */
+const PL_TITLE_DEF='แผนงานประจำวัน · RM TEAM', BD_TITLE_DEF='แผนซ่อมเครื่องจักร (Breakdown)';
+const KEY_PLAN_TITLES='uacj.plan.titles', KEY_BD='uacj.plan.bd';
+let plKind=store.read('uacj.plan.kind','normal');
+let plTitles=store.read(KEY_PLAN_TITLES,{});
+const BD_LANES={
+  ele:{name:'ไฟฟ้า',en:'Electric',color:'#E2A43B',mark:'⚡',
+       tasks:['ตรวจหาสาเหตุ','ตรวจเช็ควงจร / Breaker','วัดค่าฉนวน (Megger)','เปลี่ยนมอเตอร์','เปลี่ยน Sensor / Limit switch','ต่อสาย / ขั้วต่อ','Reset ระบบ / PLC','ทดสอบเดินเครื่อง']},
+  mec:{name:'เมคคานิกส์',en:'Mechanic',color:'#3E7CB1',mark:'🔩',
+       tasks:['ตรวจหาสาเหตุ','ถอดชิ้นส่วน','เปลี่ยน Bearing','เปลี่ยน Coupling','ตั้งศูนย์ (Alignment)','เชื่อม / ซ่อมโครงสร้าง','ประกอบกลับ','ทดสอบเดินเครื่อง']},
+  pro:{name:'ฝ่ายผลิต / อื่นๆ',en:'Production / Other',color:'#2F6B4B',mark:'🏭',
+       tasks:['LOTO / ตัดพลังงาน','เตรียมพื้นที่ / เครื่องมือ','ทำความสะอาดพื้นที่','ปลด LOTO','เดินเครื่องทดสอบ','ตรวจคุณภาพงานแรก','ประสานงาน / รายงาน']}
+};
+const BD_ORDER=['ele','mec','pro'];
+const toMin=v=>{ const t=new Date(v).getTime(); return isNaN(t)?NaN:Math.round(t/60000); };
+function fromMin(m){ const d=new Date(m*60000); return plLocalISO(d)+'T'+pad2(d.getHours())+':'+pad2(d.getMinutes()); }
+function bdNew(){
+  const n=Math.floor(Date.now()/60000/15)*15;
+  return {id:'b'+Date.now().toString(36),title:BD_TITLE_DEF,machine:'',symptom:'',stop:n,restart:n+240,
+          lanes:{ele:{on:true,owner:''},mec:{on:true,owner:''},pro:{on:false,owner:''}},tasks:[]};
+}
+let bd=store.read(KEY_BD,null)||bdNew();
+function bdSave(){ store.write(KEY_BD,bd); }
+const bdOn=()=>BD_ORDER.filter(k=>bd.lanes[k]&&bd.lanes[k].on);
+function bdRange(){
+  const r0=Math.floor(bd.stop/60)*60; let r1=Math.ceil(bd.restart/60)*60;
+  if(!(r1>r0)) r1=r0+60; if(r1-r0>1440) r1=r0+1440;
+  return {r0,r1};
+}
+function bdClock(m){ const d=new Date(m*60000); return pad2(d.getHours())+':'+pad2(d.getMinutes()); }
+function bdDay(m){ const d=new Date(m*60000); return d.toLocaleDateString('th-TH',{day:'numeric',month:'short'}); }
+function bdStamp(m){ const d=new Date(m*60000); return d.toLocaleDateString('th-TH',{weekday:'short',day:'numeric',month:'short'})+' '+bdClock(m); }
+/* เวลาที่ข้ามวันจากวันเครื่องหยุด จะมีวันที่กำกับ */
+function bdSpan(a,b){ return bdClock(a)+'–'+bdClock(b)+(bdDay(b)!==bdDay(bd.stop)?' ('+bdDay(b)+')':''); }
+function bdClockD(m){ return bdDay(m)!==bdDay(bd.stop)? bdClock(m)+' ('+bdDay(m)+')' : bdClock(m); }
+function plTitleNow(){ return plKind==='bd' ? (bd.title||BD_TITLE_DEF) : (plTitles[plKey()]||PL_TITLE_DEF); }
 
 const plKey=()=>plDate+'|'+plShift;
 const plTasks=()=>(plDrafts[plKey()]||[]);
@@ -6311,6 +6450,14 @@ function plLanes(list){
 
 function renderPlan(){
   if(!plDate) plDefaults();
+  $('#plKindN').setAttribute('aria-selected',plKind==='normal');
+  $('#plKindB').setAttribute('aria-selected',plKind==='bd');
+  $('#s-plan').classList.toggle('is-bd',plKind==='bd');
+  $('#plNormal').hidden=plKind==='bd'; $('#plBd').hidden=plKind!=='bd';
+  $('#s-plan .appbar-txt h1').textContent=plKind==='bd'?'รายงานเครื่องพัง':'แผนงานรายวัน';
+  $('#s-plan .appbar-txt p').textContent=plKind==='bd'?'Breakdown · แผนงานซ่อมแยกตามฝ่าย':'RM TEAM · วางงานรายชั่วโมงของกะ';
+  if(document.activeElement!==$('#plTitle')) $('#plTitle').value=plTitleNow();
+  if(plKind==='bd'){ renderBd(); return; }
   $('#plDate').value=plDate;
   $('#plDay').setAttribute('aria-selected',plShift==='day');
   $('#plNight').setAttribute('aria-selected',plShift==='night');
@@ -6343,8 +6490,59 @@ function renderPlan(){
   const tl=$('#plTl'); tl.style.height=(S.len/60*PL_HOUR_H+12)+'px'; tl.innerHTML=h;
 }
 
+/* ---------- หน้าจอโหมดเครื่องพัง ---------- */
+const BD_HEAD=40;
+function renderBd(){
+  const ae=document.activeElement;
+  if(ae!==$('#bdMachine')) $('#bdMachine').value=bd.machine;
+  if(ae!==$('#bdSymptom')) $('#bdSymptom').value=bd.symptom;
+  if(ae!==$('#bdStop')) $('#bdStop').value=fromMin(bd.stop);
+  if(ae!==$('#bdRestart')) $('#bdRestart').value=fromMin(bd.restart);
+  plChips('#bdMachineChips',PL_AREAS,'bdMachine'); plSyncChips();
+  const down=bd.restart-bd.stop;
+  $('#bdDown').innerHTML = down>0 ? `รวมเวลาหยุด <b>${plDurTxt(down)}</b>${down>1440?' · ไทม์ไลน์แสดง 24 ชม. แรก':''}` : '<span class="bad">เวลาคาดว่าเดินได้ต้องหลังเวลาเครื่องหยุด</span>';
+  // เลือกฝ่าย
+  $('#bdLanePick').innerHTML=BD_ORDER.map(k=>`<button type="button" class="bd-lpick${bd.lanes[k].on?' on':''}" data-bdlane="${k}" style="--lc:${BD_LANES[k].color}"><i></i>${BD_LANES[k].name}</button>`).join('');
+  const own=$('#bdOwners'), focused=ae&&ae.dataset&&ae.dataset.bdowner;
+  if(!focused) own.innerHTML=bdOn().map(k=>`<label class="bd-owner" style="--lc:${BD_LANES[k].color}"><span>ผู้รับผิดชอบ${BD_LANES[k].name}</span>
+      <input type="text" data-bdowner="${k}" maxlength="40" placeholder="ชื่อหัวหน้าช่าง / ผู้ประสานงาน" value="${esc(bd.lanes[k].owner||'')}"></label>`).join('');
+  // สรุป
+  const on=bdOn(), list=bd.tasks.filter(t=>on.includes(t.lane));
+  $('#bdSum').innerHTML = !on.length ? 'เลือกฝ่ายที่เข้าทำงานอย่างน้อย 1 ฝ่าย'
+    : list.length ? `<b>${list.length}</b> งาน · `+on.map(k=>BD_LANES[k].name+' '+list.filter(t=>t.lane===k).length).join(' · ')
+    : 'ยังไม่มีงาน · กดปุ่ม <b>+ งาน…</b> ของแต่ละฝ่ายด้านล่าง';
+  // ไทม์ไลน์: แถว = ชั่วโมง, คอลัมน์ = ฝ่าย
+  const {r0,r1}=bdRange(), hrs=(r1-r0)/60, n=Math.max(1,on.length);
+  let h='';
+  for(let i=0;i<=hrs;i++){ const m=r0+i*60, newDay=i>0&&bdDay(m)!==bdDay(m-60);
+    h+=`<div class="pl-hr${newDay?' is-day':''}" style="top:${BD_HEAD+i*PL_HOUR_H}px"><time>${bdClock(m)}${newDay?'<small>'+bdDay(m)+'</small>':''}</time></div>`; }
+  h+='<div class="bd-lh">'+on.map(k=>`<span style="--lc:${BD_LANES[k].color}">${BD_LANES[k].name}</span>`).join('')+'</div>';
+  h+=`<div class="pl-lanes" style="top:${BD_HEAD+6}px">`;
+  on.forEach((k,ci)=>{
+    const col=bd.tasks.filter(t=>t.lane===k).map(t=>({...t,start:t.s,end:t.e})).filter(t=>t.end>r0&&t.start<r1).sort((a,b)=>a.start-b.start);
+    plLanes(col).forEach(t=>{
+      const st=Math.max(t.start,r0), en=Math.min(t.end,r1);
+      const top=(st-r0)/60*PL_HOUR_H, ht=Math.max(22,(en-st)/60*PL_HOUR_H-3);
+      const cw=100/n, w=cw/t._lanes, l=ci*cw+t._lane*w;
+      h+=`<button class="pl-task bd-task${ht<44?' sm':''}" data-btid="${t.id}" style="--lc:${BD_LANES[k].color};top:${top+1}px;height:${ht}px;left:calc(${l}% + 2px);width:calc(${w}% - 4px)">
+        <b>${esc(t.name)}</b><span>${bdClock(t.start)}–${bdClock(t.end)}</span></button>`;
+    });
+  });
+  h+='</div>';
+  const mark=(m,cls,txt)=>{ if(m<r0||m>r1) return ''; return `<div class="bd-mark ${cls}" style="top:${BD_HEAD+6+(m-r0)/60*PL_HOUR_H}px"><span>${txt}</span></div>`; };
+  h+=mark(bd.stop,'stop','หยุด '+bdClock(bd.stop))+mark(bd.restart,'run','คาดว่าเดินได้ '+bdClock(bd.restart));
+  const tl=$('#bdTl'); tl.style.height=(BD_HEAD+hrs*PL_HOUR_H+16)+'px'; tl.innerHTML=h;
+  $('#bdAdds').innerHTML=on.map(k=>`<button class="pl-add bd-add" data-bdadd="${k}" style="--lc:${BD_LANES[k].color}"><b>+</b> งาน${BD_LANES[k].name}</button>`).join('');
+}
+
 /* ---------- แผ่นเพิ่ม/แก้ไขงาน ---------- */
 function plFillTimes(selStart,selEnd){
+  if(plKind==='bd'){
+    const {r0,r1}=bdRange(); let a='',b='';
+    for(let m=r0;m<r1;m+=PL_STEP) a+=`<option value="${m}"${m===selStart?' selected':''}>${bdClockD(m)}</option>`;
+    for(let m=r0+PL_STEP;m<=r1;m+=PL_STEP) b+=`<option value="${m}"${m===selEnd?' selected':''}>${bdClockD(m)}</option>`;
+    $('#plStart').innerHTML=a; $('#plEnd').innerHTML=b; plShowDur(); return;
+  }
   const S=PL_SHIFT[plShift]; let a='',b='';
   for(let m=0;m<S.len;m+=PL_STEP) a+=`<option value="${m}"${m===selStart?' selected':''}>${plClock(m)}${plIsOT(m)?'  (OT)':''}</option>`;
   for(let m=PL_STEP;m<=S.len;m+=PL_STEP) b+=`<option value="${m}"${m===selEnd?' selected':''}>${plClock(m)}${m>S.ot?'  (OT)':''}</option>`;
@@ -6361,7 +6559,28 @@ function plChips(box,list,input){
 function plSyncChips(){
   $$('.pl-chip').forEach(c=>c.classList.toggle('on', $('#'+c.dataset.fill).value.trim()===c.dataset.v));
 }
+let plEditLane='ele';
+function bdLaneSel(){
+  $('#plLaneSel').innerHTML=bdOn().map(k=>`<button type="button" class="bd-lopt${k===plEditLane?' on':''}" data-lanesel="${k}" style="--lc:${BD_LANES[k].color}">${BD_LANES[k].name}</button>`).join('');
+  plChips('#plNameChips',BD_LANES[plEditLane].tasks,'plName'); plSyncChips();
+}
+function bdOpenSheet(id,lane){
+  plEditId=id||null;
+  const t=id?bd.tasks.find(x=>x.id===id):null;
+  plEditLane=t?t.lane:(lane||bdOn()[0]||'ele');
+  const {r0,r1}=bdRange();
+  const last=bd.tasks.filter(x=>x.lane===plEditLane).sort((a,b)=>a.e-b.e).slice(-1)[0];
+  let st=t?t.s:(last?last.e:Math.ceil(bd.stop/15)*15); st=Math.min(Math.max(st,r0),r1-PL_STEP);
+  const en=t?t.e:Math.min(st+60,r1);
+  $('#plSheetT').textContent=t?'แก้ไขงาน':'เพิ่มงาน';
+  $('#plLaneF').hidden=false; $('#plAreaF').hidden=true;
+  $('#plName').value=t?t.name:''; $('#plNote').value=t?(t.note||''):''; $('#plArea').value='';
+  $('#plErr').textContent=''; $('#plDel').hidden=!t;
+  bdLaneSel(); plFillTimes(st,en); plSheet('#plSheet',true);
+}
 function plOpenSheet(id){
+  if(plKind==='bd') return bdOpenSheet(id);
+  $('#plLaneF').hidden=true; $('#plAreaF').hidden=false;
   plEditId=id||null;
   const t=id?plTasks().find(x=>x.id===id):null;
   const last=plSorted().slice(-1)[0];
@@ -6385,19 +6604,44 @@ function plSave(){
   const name=$('#plName').value.trim(), a=+$('#plStart').value, b=+$('#plEnd').value;
   if(!name) return plShake('ใส่ชื่องานก่อนนะ');
   if(!(b>a)) return plShake('เวลาจบต้องหลังเวลาเริ่ม');
+  if(plKind==='bd'){
+    const task={id:plEditId||('t'+Date.now().toString(36)),lane:plEditLane,name,s:a,e:b,note:$('#plNote').value.trim()};
+    bd.tasks=bd.tasks.filter(x=>x.id!==task.id).concat(task); bdSave();
+    plSheet('#plSheet',false); renderPlan(); buzz(); toast(plEditId?'แก้ไขงานแล้ว':'เพิ่มงานแล้ว'); return;
+  }
   const task={id:plEditId||('t'+Date.now().toString(36)),name,start:a,end:b,area:$('#plArea').value.trim(),note:$('#plNote').value.trim()};
   const arr=plTasks().filter(x=>x.id!==task.id); arr.push(task); plSetTasks(arr);
   plSheet('#plSheet',false); renderPlan(); buzz(); toast(plEditId?'แก้ไขงานแล้ว':'เพิ่มงานแล้ว');
 }
 function plDelete(){
   if(!plEditId) return;
+  if(plKind==='bd'){ bd.tasks=bd.tasks.filter(x=>x.id!==plEditId); bdSave(); plSheet('#plSheet',false); renderPlan(); buzz(); toast('ลบงานแล้ว'); return; }
   plSetTasks(plTasks().filter(x=>x.id!==plEditId)); plSheet('#plSheet',false); renderPlan(); buzz(); toast('ลบงานแล้ว');
 }
 
 /* ---------- ข้อความ LINE ---------- */
+function bdMessage(){
+  const on=bdOn(), down=bd.restart-bd.stop;
+  const L=['🚨 BREAKDOWN · '+(bd.title||BD_TITLE_DEF)];
+  if(bd.machine) L.push('🔧 เครื่อง/อุปกรณ์: '+bd.machine);
+  if(bd.symptom) L.push('⚠️ อาการ/สาเหตุ: '+bd.symptom);
+  L.push('⏹️ เครื่องหยุด: '+bdStamp(bd.stop),'▶️ คาดว่าเดินได้: '+bdStamp(bd.restart));
+  if(down>0) L.push('⏱️ รวมเวลาหยุด: '+plDurTxt(down));
+  L.push('━━━━━━━━━━━━━━━━');
+  on.forEach(k=>{
+    const D=BD_LANES[k], o=bd.lanes[k].owner;
+    L.push('',D.mark+' '+D.name+(o?'  ·  ผู้รับผิดชอบ: '+o:''));
+    const list=bd.tasks.filter(t=>t.lane===k).sort((a,b)=>a.s-b.s);
+    if(!list.length) L.push('   — ยังไม่มีงาน —');
+    list.forEach(t=>{ L.push('⏰ '+bdSpan(t.s,t.e)+'  '+t.name); if(t.note) L.push('   📝 '+t.note); });
+  });
+  L.push('━━━━━━━━━━━━━━━━');
+  return L.join('\n');
+}
 function plMessage(){
+  if(plKind==='bd') return bdMessage();
   const S=PL_SHIFT[plShift], list=plSorted();
-  const L=['📋 แผนงานประจำวัน RM TEAM','📅 '+plThaiDate(plDate),S.mark+' '+S.name+' '+plClock(0)+'–'+plClock(S.len),'━━━━━━━━━━━━━━━━'];
+  const L=['📋 '+plTitleNow(),'📅 '+plThaiDate(plDate),S.mark+' '+S.name+' '+plClock(0)+'–'+plClock(S.len),'━━━━━━━━━━━━━━━━'];
   if(!list.length) L.push('— ยังไม่มีงาน —');
   let otShown=false;
   list.forEach(t=>{
@@ -6410,9 +6654,14 @@ function plMessage(){
   return L.join('\n');
 }
 function plSaveHistory(){
+  if(plKind==='bd'){
+    const h=store.read(KEY_PLAN_HIST,[]).filter(x=>x.k!=='bd|'+bd.id);
+    h.unshift({k:'bd|'+bd.id,kind:'bd',bd:JSON.parse(JSON.stringify(bd)),t:Date.now()});
+    store.write(KEY_PLAN_HIST,h.slice(0,60)); return;
+  }
   const list=plSorted(); if(!list.length) return;
   const h=store.read(KEY_PLAN_HIST,[]).filter(x=>x.k!==plKey());
-  h.unshift({k:plKey(),date:plDate,shift:plShift,tasks:list.map(({_lane,_lanes,...t})=>t),t:Date.now()});
+  h.unshift({k:plKey(),date:plDate,shift:plShift,title:plTitleNow(),tasks:list.map(({_lane,_lanes,...t})=>t),t:Date.now()});
   store.write(KEY_PLAN_HIST,h.slice(0,60));
 }
 /* ---------- รูปไทม์ไลน์แนวนอน (PNG) ---------- */
@@ -6459,6 +6708,7 @@ function plBlockH(b,lh){ return b.lines.length*b.size*lh; }
 function plDrawBlock(c,b,x,y,lh,F){ c.font=`${b.weight} ${b.size}px ${F}`; b.lines.forEach((l,i)=>c.fillText(l,x,y+b.size+i*b.size*lh)); }
 
 async function plRenderImage(){
+  if(plKind==='bd') return bdRenderImage();
   try{ await document.fonts.load('800 30px "Noto Sans Thai Looped"'); await document.fonts.load('400 20px "Noto Sans Thai Looped"'); await document.fonts.load('700 20px "Noto Sans Thai Looped"'); }catch(e){}
   const F='"Noto Sans Thai Looped",sans-serif';
   const S=PL_SHIFT[plShift], list=plSorted(), hours=S.len/60;
@@ -6503,7 +6753,7 @@ async function plRenderImage(){
   c.fillStyle='#FBF1DE'; c.fillRect(0,0,W,H);
   c.fillStyle='#1E4532'; c.fillRect(0,0,W,HEAD);
   c.fillStyle='#E2A43B'; c.fillRect(0,HEAD-8,W,8);
-  c.fillStyle='#FBF1DE'; c.font=`800 46px ${F}`; c.fillText('แผนงานประจำวัน · RM TEAM',PAD,72);
+  c.fillStyle='#FBF1DE'; { const tb=plFitBlock(c,plTitleNow(),W-PAD*2-260,1,800,46,26,F); c.font=`800 ${tb.size}px ${F}`; c.fillText(tb.lines.join(' '),PAD,72); }
   c.fillStyle='#E2A43B'; c.font=`600 26px ${F}`; c.fillText(plThaiDate(plDate)+'   ·   '+S.name+' '+plClock(0)+'–'+plClock(S.len),PAD,116);
   const busy=list.reduce((a,t)=>a+(t.end-t.start),0);
   c.textAlign='right'; c.fillStyle='#FBF1DE'; c.font=`800 40px ${F}`; c.fillText(list.length+' งาน',W-PAD,72);
@@ -6547,7 +6797,143 @@ async function plRenderImage(){
   c.fillStyle='#8C9A8F'; c.font=`400 18px ${F}`; c.fillText('HRM Trouble Report · UACJ (Thailand) Hot Rolling',PAD,H-36);
   return new Promise(res=>cv.toBlob(b=>res(b),'image/png'));
 }
-function plFileName(){ return 'แผนงาน_'+plDate+'_'+(plShift==='day'?'กะเช้า':'กะดึก')+'.png'; }
+/* ---------- รูปไทม์ไลน์ Breakdown (โทนแดงเตือนภัย) ---------- */
+async function bdRenderImage(){
+  try{ await document.fonts.load('800 30px "Noto Sans Thai Looped"'); await document.fonts.load('400 20px "Noto Sans Thai Looped"'); await document.fonts.load('700 20px "Noto Sans Thai Looped"'); }catch(e){}
+  const F='"Noto Sans Thai Looped",sans-serif';
+  const on=bdOn(), {r0,r1}=bdRange(), hours=(r1-r0)/60;
+  const PAD=48, LBL=230, HW=Math.max(64,Math.min(150,1440/hours)), LEFT=PAD+LBL+16, TLW=hours*HW, W=Math.max(1400,LEFT+TLW+PAD);
+  const x=m=>LEFT+(Math.min(Math.max(m,r0),r1)-r0)/60*HW;
+  const cv=document.createElement('canvas'); const c=cv.getContext('2d');
+  const RED='#7A1420', RED2='#A3243A', CREAM='#FBF1DE', INK='#2A1416';
+  // งานต่อฝ่าย + จัดแถวย่อยไม่ให้ทับกัน
+  const BP=10, LH_N=1.22, LH_T=1.3, GAP=12;
+  const lanes=on.map(k=>{
+    const D=BD_LANES[k];
+    const ts=bd.tasks.filter(t=>t.lane===k&&t.e>r0&&t.s<r1).sort((a,b)=>a.s-b.s).map(t=>({...t}));
+    const rows=[]; ts.forEach(t=>{ let i=rows.findIndex(e=>e<=t.s); if(i<0){i=rows.length;rows.push(0);} rows[i]=t.e; t._row=i; });
+    ts.forEach(t=>{
+      const bw=Math.max(8,x(t.e)-x(t.s)-4), iw=Math.max(20,bw-2*BP); t._bw=bw;
+      t._nb=plFitBlock(c,t.name,iw,3,800,22,12,F);
+      t._tb=plFitBlock(c,bdClock(t.s)+'–'+bdClock(t.e),iw,1,600,17,10,F);
+      t._h=BP*2+plBlockH(t._nb,LH_N)+4+plBlockH(t._tb,LH_T);
+    });
+    const lb=plFitBlock(c,D.name,LBL-28,2,800,26,16,F);
+    const ob=plFitBlock(c,bd.lanes[k].owner?'ผู้รับผิดชอบ: '+bd.lanes[k].owner:'ผู้รับผิดชอบ: —',LBL-28,3,400,17,12,F);
+    return {k,D,ts,rows:Math.max(1,rows.length),lb,ob};
+  });
+  const BAR=Math.max(76,...lanes.flatMap(l=>l.ts.map(t=>Math.ceil(t._h))));
+  lanes.forEach(l=>{ l.h=Math.max(l.rows*(BAR+GAP)+GAP, 24+plBlockH(l.lb,1.25)+8+plBlockH(l.ob,1.35)+20); });
+  // ส่วนหัวข้อมูล
+  const HEAD=150, IW=W-PAD*2;
+  const cellW=(IW-3*16)/4;
+  const cells=[['เครื่อง / อุปกรณ์',bd.machine||'—'],['เครื่องหยุด',bdStamp(bd.stop)],['คาดว่าเดินได้',bdStamp(bd.restart)],['รวมเวลาหยุด',bd.restart>bd.stop?plDurTxt(bd.restart-bd.stop):'—']]
+    .map(([k,v],i)=>({k,v,b:plFitBlock(c,v,cellW-32,2,800,i===3?34:26,15,F)}));
+  const cellH=Math.max(...cells.map(o=>22+16+plBlockH(o.b,1.25)+18));
+  const symB=plFitBlock(c,bd.symptom||'—',IW-32,4,600,24,15,F);
+  const symH=22+16+plBlockH(symB,1.4)+18;
+  const infoTop=HEAD+24, axisTop=infoTop+cellH+14+symH+40, AXIS=50, tlTop=axisTop+AXIS+10;
+  const tlH=lanes.reduce((a,l)=>a+l.h+10,0)||120;
+  // ตารางรายละเอียด
+  const C_TIME=PAD+20, C_NAME=PAD+300, NAME_W=440, C_NOTE=C_NAME+NAME_W+30, NOTE_W=W-PAD-C_NOTE, LH_L=1.35;
+  let detH=0;
+  lanes.forEach(l=>{ detH+=56; (l.ts.length?l.ts:[null]).forEach(t=>{
+    if(!t){ detH+=50; return; }
+    t._ln=plFitBlock(c,t.name,NAME_W,2,800,21,15,F); t._tm=plFitBlock(c,bdSpan(t.s,t.e),C_NAME-C_TIME-24,2,700,20,13,F);
+    t._lr=plFitBlock(c,t.note||'—',NOTE_W,3,400,19,14,F);
+    t._rowH=Math.max(50,24+Math.max(plBlockH(t._ln,LH_L),plBlockH(t._lr,LH_L),plBlockH(t._tm,LH_L))); detH+=t._rowH+4; }); detH+=14; });
+  const detTop=tlTop+tlH+70, H=detTop+detH+80;
+  const sc=2; cv.width=W*sc; cv.height=H*sc; c.setTransform(sc,0,0,sc,0,0); c.textBaseline='alphabetic';
+  // พื้น + หัวแดง + แถบเตือนเฉียง
+  c.fillStyle=CREAM; c.fillRect(0,0,W,H);
+  c.fillStyle=RED; c.fillRect(0,0,W,HEAD);
+  c.save(); c.beginPath(); c.rect(0,HEAD-14,W,14); c.clip(); c.fillStyle='#F2C14E'; c.fillRect(0,HEAD-14,W,14); c.fillStyle='#2A1416';
+  for(let i=-20;i<W+20;i+=36){ c.beginPath(); c.moveTo(i,HEAD); c.lineTo(i+18,HEAD); c.lineTo(i+32,HEAD-14); c.lineTo(i+14,HEAD-14); c.closePath(); c.fill(); } c.restore();
+  // ป้าย BREAKDOWN
+  c.font=`800 22px ${F}`; const bwid=c.measureText('BREAKDOWN').width+36;
+  c.fillStyle='#F2C14E'; plRoundRect(c,PAD,28,bwid,38,19); c.fill();
+  c.fillStyle=RED; c.fillText('BREAKDOWN',PAD+18,55);
+  c.fillStyle=CREAM; { const tb=plFitBlock(c,bd.title||BD_TITLE_DEF,W-PAD*2-bwid-300,1,800,40,22,F); c.font=`800 ${tb.size}px ${F}`; c.fillText(tb.lines.join(' '),PAD+bwid+18,60); }
+  c.fillStyle='#F5C9C9'; c.font=`600 22px ${F}`;
+  c.fillText('ไทม์ไลน์งานซ่อม '+bdClockD(r0)+' – '+bdClockD(r1)+'   ·   '+on.map(k=>BD_LANES[k].name).join(' / '),PAD,110);
+  const nT=lanes.reduce((a,l)=>a+l.ts.length,0);
+  c.textAlign='right'; c.fillStyle=CREAM; c.font=`800 38px ${F}`; c.fillText(nT+' งาน',W-PAD,62);
+  c.fillStyle='#F5C9C9'; c.font=`400 20px ${F}`; c.fillText(on.length+' ฝ่าย',W-PAD,100); c.textAlign='left';
+  // การ์ดข้อมูล
+  cells.forEach((o,i)=>{
+    const cx=PAD+i*(cellW+16), hot=i===3;
+    c.fillStyle=hot?RED2:'#FFFFFF'; plRoundRect(c,cx,infoTop,cellW,cellH,14); c.fill();
+    if(!hot){ c.strokeStyle='#E8C9B8'; c.lineWidth=1.5; plRoundRect(c,cx,infoTop,cellW,cellH,14); c.stroke(); }
+    c.fillStyle=hot?'#F5C9C9':'#8A5A50'; c.font=`600 17px ${F}`; c.fillText(o.k,cx+16,infoTop+30);
+    c.fillStyle=hot?CREAM:INK; plDrawBlock(c,o.b,cx+16,infoTop+40,1.25,F);
+  });
+  { const sy=infoTop+cellH+14; c.fillStyle='#FFF6EE'; plRoundRect(c,PAD,sy,IW,symH,14); c.fill();
+    c.fillStyle=RED2; plRoundRect(c,PAD,sy,8,symH,4); c.fill();
+    c.fillStyle='#8A5A50'; c.font=`600 17px ${F}`; c.fillText('อาการ / สาเหตุเบื้องต้น',PAD+20,sy+30);
+    c.fillStyle=INK; plDrawBlock(c,symB,PAD+20,sy+40,1.4,F); }
+  // เส้นชั่วโมง
+  for(let i=0;i<=hours;i++){
+    const m=r0+i*60, xx=LEFT+i*HW, nd=i>0&&bdDay(m)!==bdDay(m-60);
+    c.strokeStyle=nd?'#C9A0A0':'#EAD9C4'; c.lineWidth=nd?2.4:(i===0||i===hours?2:1.2);
+    c.beginPath(); c.moveTo(xx,axisTop+AXIS-6); c.lineTo(xx,tlTop+tlH); c.stroke();
+    const lbl=bdClock(m); c.fillStyle=INK; c.font=`700 ${HW<90?18:21}px ${F}`;
+    c.textAlign=i===0?'left':(i===hours?'right':'center'); c.fillText(lbl,xx,axisTop+AXIS-14);
+    if(nd||i===0){ c.fillStyle=RED2; c.font=`600 15px ${F}`; c.fillText(bdDay(m),xx,axisTop+AXIS-38); }
+  }
+  c.textAlign='left';
+  // ช่วงเครื่องหยุด (พื้นแดงจาง)
+  c.fillStyle='rgba(163,36,58,.07)'; c.fillRect(x(bd.stop),tlTop-6,x(bd.restart)-x(bd.stop),tlH+6);
+  // แต่ละฝ่าย
+  let ly=tlTop;
+  lanes.forEach((l,li)=>{
+    c.fillStyle=li%2?'rgba(255,255,255,.55)':'rgba(255,255,255,.85)'; c.fillRect(LEFT,ly,TLW,l.h);
+    c.fillStyle=l.D.color; plRoundRect(c,PAD,ly,LBL,l.h,14); c.fill();
+    const tc=plTextOn(l.D.color); c.fillStyle=tc;
+    plDrawBlock(c,l.lb,PAD+14,ly+12,1.25,F);
+    c.globalAlpha=.9; plDrawBlock(c,l.ob,PAD+14,ly+12+plBlockH(l.lb,1.25)+8,1.35,F); c.globalAlpha=1;
+    if(!l.ts.length){ c.fillStyle='#A08880'; c.font=`600 20px ${F}`; c.fillText('ยังไม่มีงาน',LEFT+16,ly+l.h/2+7); }
+    l.ts.forEach(t=>{
+      const bx=x(t.s)+2, bw=t._bw, by=ly+GAP+t._row*(BAR+GAP);
+      c.fillStyle='rgba(60,10,16,.18)'; plRoundRect(c,bx+2,by+4,bw,BAR,12); c.fill();
+      c.fillStyle=l.D.color; plRoundRect(c,bx,by,bw,BAR,Math.min(12,bw/2)); c.fill();
+      c.fillStyle=tc; plDrawBlock(c,t._nb,bx+BP,by+BP-2,LH_N,F);
+      c.globalAlpha=.92; plDrawBlock(c,t._tb,bx+BP,by+BP+plBlockH(t._nb,LH_N)+2,LH_T,F); c.globalAlpha=1;
+    });
+    ly+=l.h+10;
+  });
+  // เส้นหยุด / คาดว่าเดินได้
+  const vline=(m,col,txt,alignRight)=>{
+    if(m<r0||m>r1) return; const xx=x(m);
+    c.strokeStyle=col; c.lineWidth=3; c.setLineDash([10,7]); c.beginPath(); c.moveTo(xx,tlTop-8); c.lineTo(xx,tlTop+tlH); c.stroke(); c.setLineDash([]);
+    c.font=`800 17px ${F}`; const tw=c.measureText(txt).width+20; let tx=alignRight?xx-tw:xx; tx=Math.max(LEFT,Math.min(tx,W-PAD-tw));
+    c.fillStyle=col; plRoundRect(c,tx,tlTop+tlH+8,tw,30,8); c.fill(); c.fillStyle='#FFFFFF'; c.fillText(txt,tx+10,tlTop+tlH+29);
+  };
+  vline(bd.stop,RED2,'หยุด '+bdClock(bd.stop),false);
+  vline(bd.restart,'#2F6B4B','คาดว่าเดินได้ '+bdClock(bd.restart),true);
+  // รายละเอียดแยกฝ่าย
+  c.fillStyle=INK; c.font=`800 28px ${F}`; c.fillText('รายละเอียดงานแต่ละฝ่าย',PAD,detTop-14);
+  let y=detTop;
+  lanes.forEach(l=>{
+    c.fillStyle=l.D.color; plRoundRect(c,PAD-12,y+8,W-PAD*2+24,42,10); c.fill();
+    c.fillStyle=plTextOn(l.D.color); c.font=`800 22px ${F}`; c.fillText(l.D.name,PAD+4,y+37);
+    const nw=c.measureText(l.D.name).width; c.font=`400 19px ${F}`;
+    c.fillText('   ·   ผู้รับผิดชอบ: '+(bd.lanes[l.k].owner||'—')+'   ·   '+l.ts.length+' งาน',PAD+4+nw,y+37);
+    y+=56;
+    if(!l.ts.length){ c.fillStyle='#A08880'; c.font=`600 19px ${F}`; c.fillText('— ยังไม่มีงาน —',C_TIME,y+30); y+=50; }
+    l.ts.forEach((t,i)=>{
+      const h=t._rowH;
+      if(i%2===0){ c.fillStyle='#F6E7D6'; plRoundRect(c,PAD-12,y,W-PAD*2+24,h,10); c.fill(); }
+      c.fillStyle=INK; plDrawBlock(c,t._tm,C_TIME,y+(h-plBlockH(t._tm,LH_L))/2-3,LH_L,F);
+      plDrawBlock(c,t._ln,C_NAME,y+(h-plBlockH(t._ln,LH_L))/2-3,LH_L,F);
+      c.fillStyle='#6E5550'; plDrawBlock(c,t._lr,C_NOTE,y+(h-plBlockH(t._lr,LH_L))/2-3,LH_L,F);
+      y+=h+4;
+    });
+    y+=14;
+  });
+  c.fillStyle='#A08880'; c.font=`400 18px ${F}`; c.fillText('HRM Trouble Report · UACJ (Thailand) Hot Rolling',PAD,H-36);
+  return new Promise(res=>cv.toBlob(b=>res(b),'image/png'));
+}
+function plFileName(){ if(plKind==='bd') return 'Breakdown_'+(bd.machine||'เครื่องจักร').replace(/[\\/:*?"<>|]/g,'-')+'_'+fromMin(bd.stop).slice(0,10)+'.png'; return 'แผนงาน_'+plDate+'_'+(plShift==='day'?'กะเช้า':'กะดึก')+'.png'; }
 async function plShowMode(){
   $$('.pl-mode button').forEach(b=>b.setAttribute('aria-selected',b.dataset.mode===plMode));
   const body=$('#plViewBody .pl-mbody'), acts=$('#plViewActs');
@@ -6590,7 +6976,10 @@ function plDownloadImage(){
 function plOpenHistory(){
   const h=store.read(KEY_PLAN_HIST,[]);
   $('#plViewT').textContent='ประวัติแผนงาน';
-  $('#plViewBody').innerHTML = h.length ? '<div class="pl-hlist">'+h.map(x=>`
+  $('#plViewBody').innerHTML = h.length ? '<div class="pl-hlist">'+h.map(x=> x.kind==='bd' ? `
+    <div class="pl-hrow"><button class="pl-hopen is-bd" data-hk="${esc(x.k)}">
+      <b>🚨 ${esc(x.bd.machine||x.bd.title||'Breakdown')}</b><span>หยุด ${esc(new Date(x.bd.stop*60000).toLocaleDateString('th-TH',{day:'numeric',month:'short'}))} ${pad2(new Date(x.bd.stop*60000).getHours())}:${pad2(new Date(x.bd.stop*60000).getMinutes())} · ${x.bd.tasks.length} งาน · ${esc(x.bd.symptom||'')}</span></button>
+      <button class="pl-hdel" data-hdel="${esc(x.k)}" aria-label="ลบ">×</button></div>` : `
     <div class="pl-hrow"><button class="pl-hopen" data-hk="${esc(x.k)}">
       <b>${esc(plThaiDate(x.date))}</b><span>${PL_SHIFT[x.shift].name} · ${x.tasks.length} งาน · ${esc(x.tasks.slice(0,3).map(t=>t.name).join(', '))}${x.tasks.length>3?'…':''}</span></button>
       <button class="pl-hdel" data-hdel="${esc(x.k)}" aria-label="ลบ">×</button></div>`).join('')+'</div>'
@@ -6603,8 +6992,15 @@ document.addEventListener('click',e=>{
   const t=e.target;
   if(t.closest('#plDay')||t.closest('#plNight')){ plShift=t.closest('[data-shift]').dataset.shift; renderPlan(); return; }
   if(t.closest('#plAdd')){ buzz(); plOpenSheet(); return; }
+  const kd=t.closest('[data-kind]'); if(kd){ plKind=kd.dataset.kind; store.write('uacj.plan.kind',plKind); buzz(); renderPlan(); return; }
+  const lp=t.closest('[data-bdlane]'); if(lp){ const k=lp.dataset.bdlane; bd.lanes[k].on=!bd.lanes[k].on;
+    if(!bdOn().length){ bd.lanes[k].on=true; toast('ต้องมีอย่างน้อย 1 ฝ่าย'); } bdSave(); renderPlan(); return; }
+  const ba=t.closest('[data-bdadd]'); if(ba){ buzz(); bdOpenSheet(null,ba.dataset.bdadd); return; }
+  const bt=t.closest('[data-btid]'); if(bt){ buzz(); bdOpenSheet(bt.dataset.btid); return; }
+  const ls=t.closest('[data-lanesel]'); if(ls){ plEditLane=ls.dataset.lanesel; bdLaneSel(); return; }
+  if(t.closest('#bdReset')){ if(bd.tasks.length||bd.machine){ plSaveHistory(); } bd=bdNew(); bdSave(); buzz(); renderPlan(); toast('เริ่มรายงานใหม่ · อันเก่าเก็บในประวัติแล้ว'); return; }
   const tb=t.closest('.pl-task'); if(tb){ buzz(); plOpenSheet(tb.dataset.tid); return; }
-  const ch=t.closest('.pl-chip'); if(ch){ $('#'+ch.dataset.fill).value=ch.dataset.v; plSyncChips(); return; }
+  const ch=t.closest('.pl-chip'); if(ch){ $('#'+ch.dataset.fill).value=ch.dataset.v; plSyncChips(); if(ch.dataset.fill==='bdMachine'){ bd.machine=ch.dataset.v; bdSave(); } return; }
   if(t.closest('#plSave')){ plSave(); return; }
   if(t.closest('#plDel')){ plDelete(); return; }
   if(t.closest('#plCancel')){ plSheet('#plSheet',false); return; }
@@ -6622,7 +7018,11 @@ document.addEventListener('click',e=>{
   }
   const ho=t.closest('[data-hk]'); if(ho){
     const x=store.read(KEY_PLAN_HIST,[]).find(r=>r.k===ho.dataset.hk); if(!x) return;
-    plDate=x.date; plShift=x.shift; plSetTasks(x.tasks.map(o=>({...o}))); plSheet('#plView',false); renderPlan(); toast('เปิดแผนงานจากประวัติแล้ว'); return;
+    if(x.kind==='bd'){ bd=JSON.parse(JSON.stringify(x.bd)); bdSave(); plKind='bd'; store.write('uacj.plan.kind',plKind); plSheet('#plView',false); renderPlan(); toast('เปิดรายงานเครื่องพังจากประวัติแล้ว'); return; }
+    plKind='normal'; store.write('uacj.plan.kind',plKind);
+    plDate=x.date; plShift=x.shift; plSetTasks(x.tasks.map(o=>({...o})));
+    if(x.title){ plTitles[plKey()]=x.title; store.write(KEY_PLAN_TITLES,plTitles); }
+    plSheet('#plView',false); renderPlan(); toast('เปิดแผนงานจากประวัติแล้ว'); return;
   }
   const hd=t.closest('[data-hdel]'); if(hd){
     store.write(KEY_PLAN_HIST,store.read(KEY_PLAN_HIST,[]).filter(r=>r.k!==hd.dataset.hdel)); plOpenHistory(); return;
@@ -6630,10 +7030,25 @@ document.addEventListener('click',e=>{
 });
 document.addEventListener('change',e=>{
   if(e.target.id==='plDate'){ plDate=e.target.value||plDate; renderPlan(); }
-  if(e.target.id==='plStart'){ const a=+e.target.value, b=$('#plEnd'); if(+b.value<=a) b.value=String(Math.min(a+60,PL_SHIFT[plShift].len)); plShowDur(); }
+  if(e.target.id==='plStart'){ const a=+e.target.value, b=$('#plEnd'); const cap=plKind==='bd'?bdRange().r1:PL_SHIFT[plShift].len; if(+b.value<=a) b.value=String(Math.min(a+60,cap)); plShowDur(); }
+  if(e.target.id==='bdStop'||e.target.id==='bdRestart'){
+    const v=toMin(e.target.value); if(isNaN(v)) return;
+    if(e.target.id==='bdStop'){ const d=bd.restart-bd.stop; bd.stop=v; if(!(bd.restart>bd.stop)) bd.restart=bd.stop+Math.max(60,d); }
+    else bd.restart=v;
+    bdSave(); renderPlan();
+  }
   if(e.target.id==='plEnd') plShowDur();
 });
-document.addEventListener('input',e=>{ if(e.target.id==='plName'||e.target.id==='plArea') plSyncChips(); });
+document.addEventListener('input',e=>{
+  const id=e.target.id;
+  if(id==='plName'||id==='plArea'||id==='bdMachine') plSyncChips();
+  if(id==='plTitle'){ const v=e.target.value;
+    if(plKind==='bd'){ bd.title=v; bdSave(); } else { plTitles[plKey()]=v; store.write(KEY_PLAN_TITLES,plTitles); } }
+  if(id==='bdMachine'){ bd.machine=e.target.value.trim(); bdSave(); }
+  if(id==='bdSymptom'){ bd.symptom=e.target.value.trim(); bdSave(); }
+  const ow=e.target.dataset&&e.target.dataset.bdowner; if(ow){ bd.lanes[ow].owner=e.target.value.trim(); bdSave(); }
+});
+document.addEventListener('focusout',e=>{ if(e.target.id==='plTitle' && !e.target.value.trim()){ e.target.value=plTitleNow(); } });
 document.addEventListener('animationend',e=>{ if(e.target.id==='plSheet') e.target.classList.remove('shake'); });
 setInterval(()=>{ if(current==='plan') renderPlan(); },60000);
 
