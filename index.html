@@ -1707,7 +1707,7 @@ body.at-plan .bottomnav{display:none}
           <span class="switch" id="swSplash" role="switch" tabindex="0"><i></i></span></div>
       </div>
       <div class="set-group">
-        <div class="set-row"><i class="ico" id="icTag"></i><span class="t">เวอร์ชัน</span><span class="v">3.2.0</span></div>
+        <div class="set-row"><i class="ico" id="icTag"></i><span class="t">เวอร์ชัน</span><span class="v">3.2.1</span></div>
         <button class="set-row" id="btnClearAct"><i class="ico" id="icHist"></i><span class="t">ล้างรายการล่าสุด</span><span class="v">›</span></button>
       </div>
       <div style="height:20px"></div>
@@ -6419,64 +6419,130 @@ function plSaveHistory(){
 const PL_COLORS=['#2F6B4B','#A3243A','#3E7CB1','#E2A43B','#7A4A8C','#2A8C82','#D9662B','#8A5A34'];
 let plMode=store.read('uacj.plan.mode','text'), plImgBlob=null, plImgUrl='';
 function plRoundRect(c,x,y,w,h,r){ c.beginPath(); c.moveTo(x+r,y); c.arcTo(x+w,y,x+w,y+h,r); c.arcTo(x+w,y+h,x,y+h,r); c.arcTo(x,y+h,x,y,r); c.arcTo(x,y,x+w,y,r); c.closePath(); }
-function plFit(c,txt,maxW){ if(c.measureText(txt).width<=maxW) return txt; let t=txt; while(t.length>1 && c.measureText(t+'…').width>maxW) t=t.slice(0,-1); return t.length>1?t+'…':''; }
 function plTextOn(hex){ const n=parseInt(hex.slice(1),16), r=n>>16, g=n>>8&255, b=n&255; return (r*299+g*587+b*114)/1000>160?'#1B3A2A':'#FFFBF2'; }
+/* ตัดบรรทัดตามรอยคำ (ภาษาไทยใช้ Intl.Segmenter) — ไม่ตัดกลางคำ */
+const plSeg=(window.Intl&&Intl.Segmenter)?new Intl.Segmenter('th',{granularity:'word'}):null;
+function plWords(t){
+  // แบ่งตามช่องว่างก่อน: ก้อนที่ไม่มีอักษรไทย (เวลา 02:45–03:30, ชื่อเครื่อง) ถือเป็นคำเดียว ไม่ถูกตัด
+  const out=[];
+  t.split(/(\s+)/).forEach(ch=>{
+    if(!ch) return;
+    if(/\s/.test(ch) || !/[฀-๿]/.test(ch) || !plSeg) out.push(ch);
+    else [...plSeg.segment(ch)].forEach(x=>out.push(x.segment));
+  });
+  return out;
+}
+function plWrap(c,text,maxW){
+  const lines=[]; let cur='';
+  plWords(text).forEach(w=>{
+    const test=cur+w;
+    if(cur && c.measureText(test.trimEnd()).width>maxW){ lines.push(cur.trimEnd()); cur=w.trimStart(); }
+    else cur=test;
+  });
+  if(cur.trim()) lines.push(cur.trimEnd());
+  return lines.length?lines:[''];
+}
+/* ลดขนาดตัวอักษรจนพอดี ถ้ายังไม่พอค่อยขึ้นบรรทัดใหม่ — ไม่มีการตัดคำทิ้ง */
+function plFitBlock(c,text,maxW,maxLines,weight,big,small,F){
+  for(let sz=big;sz>=small;sz--){
+    c.font=`${weight} ${sz}px ${F}`;
+    const L=plWrap(c,text,maxW);
+    if(L.length<=maxLines && L.every(l=>c.measureText(l).width<=maxW)) return {size:sz,lines:L,weight};
+  }
+  // เล็กสุดแล้วยังไม่พอ: ใช้ขนาดเล็กสุด แล้วขึ้นบรรทัดเท่าที่ต้องใช้ (คำยาวเกินช่องจะลดขนาดเฉพาะคำนั้น)
+  let sz=small; c.font=`${weight} ${sz}px ${F}`;
+  let L=plWrap(c,text,maxW);
+  while(sz>9 && L.some(l=>c.measureText(l).width>maxW)){ sz--; c.font=`${weight} ${sz}px ${F}`; L=plWrap(c,text,maxW); }
+  return {size:sz,lines:L,weight};
+}
+function plBlockH(b,lh){ return b.lines.length*b.size*lh; }
+function plDrawBlock(c,b,x,y,lh,F){ c.font=`${b.weight} ${b.size}px ${F}`; b.lines.forEach((l,i)=>c.fillText(l,x,y+b.size+i*b.size*lh)); }
+
 async function plRenderImage(){
-  try{ await document.fonts.load('800 30px "Noto Sans Thai Looped"'); await document.fonts.load('400 20px "Noto Sans Thai Looped"'); }catch(e){}
+  try{ await document.fonts.load('800 30px "Noto Sans Thai Looped"'); await document.fonts.load('400 20px "Noto Sans Thai Looped"'); await document.fonts.load('700 20px "Noto Sans Thai Looped"'); }catch(e){}
   const F='"Noto Sans Thai Looped",sans-serif';
   const S=PL_SHIFT[plShift], list=plSorted(), hours=S.len/60;
   const PAD=48, LEFT=PAD, HW=128, TLW=hours*HW, W=LEFT+TLW+PAD;
-  const lanes=plLanes(list.map(t=>({...t}))); const nLanes=Math.max(1,...lanes.map(t=>t._lane+1));
-  // ใช้ลำดับแถวแบบ global (ไม่ใช่ต่อกลุ่ม) ให้แท่งไม่ทับกัน
-  const rows=[]; lanes.sort((a,b)=>a.start-b.start).forEach(t=>{ let i=rows.findIndex(e=>e<=t.start); if(i<0){i=rows.length;rows.push(0);} rows[i]=t.end; t._row=i; });
-  lanes.forEach((t,i)=>t._color=PL_COLORS[i%PL_COLORS.length]);
-  const BAR=74, GAP=14, HEAD=150, AXIS=46, tlTop=HEAD+AXIS+18, tlH=Math.max(1,rows.length)*(BAR+GAP)+GAP;
-  const LROW=58, legendTop=tlTop+tlH+56, H=legendTop+Math.max(1,lanes.length)*LROW+90;
-  const cv=document.createElement('canvas'); const sc=2; cv.width=W*sc; cv.height=H*sc; const c=cv.getContext('2d'); c.scale(sc,sc);
-  // พื้น
+  const tasks=list.map(t=>({...t}));
+  const rows=[]; tasks.forEach(t=>{ let i=rows.findIndex(e=>e<=t.start); if(i<0){i=rows.length;rows.push(0);} rows[i]=t.end; t._row=i; });
+  tasks.forEach((t,i)=>t._color=PL_COLORS[i%PL_COLORS.length]);
+  const x=m=>LEFT+m/60*HW;
+  const cv=document.createElement('canvas'); const c=cv.getContext('2d');
+  // วัดข้อความในแท่งก่อน เพื่อกำหนดความสูงแท่งให้พอดีทุกงาน
+  const BP=10, LH_N=1.22, LH_T=1.3;
+  tasks.forEach(t=>{
+    const bw=Math.max(8,x(t.end)-x(t.start)-4), iw=Math.max(20,bw-2*BP);
+    t._bw=bw;
+    t._nb=plFitBlock(c,t.name,iw,2,800,24,15,F);
+    const tm=plClock(t.start)+'–'+plClock(t.end);
+    t._tb=plFitBlock(c,tm+(t.area?'  ·  '+t.area:''),iw,1,400,18,12,F);
+    if(t._tb.lines.length>1 || c.measureText(t._tb.lines[0]).width>iw){
+      // แท่งแคบ: เวลาอยู่บรรทัดหนึ่ง (ลดขนาดได้ ไม่ตัด) พื้นที่ขึ้นบรรทัดถัดไป
+      const tb=plFitBlock(c,tm,iw,1,400,18,10,F);
+      if(t.area){ const ab=plFitBlock(c,t.area,iw,2,400,Math.min(18,tb.size+2),11,F);
+        t._tb={size:Math.min(tb.size,ab.size),lines:[...tb.lines,...ab.lines],weight:400};
+        c.font=`400 ${t._tb.size}px ${F}`;
+        if(t._tb.lines.some(l=>c.measureText(l).width>iw)) t._tb={size:Math.min(tb.size,ab.size),lines:[...tb.lines,...ab.lines],weight:400};
+      } else t._tb=tb;
+    }
+    t._h=BP*2+plBlockH(t._nb,LH_N)+6+plBlockH(t._tb,LH_T);
+  });
+  const BAR=Math.max(80,...tasks.map(t=>Math.ceil(t._h))), GAP=14;
+  const HEAD=150, AXIS=46, tlTop=HEAD+AXIS+18, tlH=Math.max(1,rows.length)*(BAR+GAP)+GAP;
+  // วัดตารางรายละเอียด
+  const C_TIME=PAD+40, C_NAME=PAD+210, NAME_W=420, C_REST=C_NAME+NAME_W+30, REST_W=W-PAD-C_REST, RP=14, LH_L=1.35;
+  tasks.forEach(t=>{
+    t._ln=plFitBlock(c,t.name,NAME_W,2,800,22,16,F);
+    const rest=[t.area?'พื้นที่: '+t.area:'',t.note?'หมายเหตุ: '+t.note:'',plIsOT(t.start)?'OT':''].filter(Boolean).join('   ·   ');
+    t._lr=plFitBlock(c,rest||'—',REST_W,2,400,20,15,F);
+    t._rowH=Math.max(52,RP*2+Math.max(plBlockH(t._ln,LH_L),plBlockH(t._lr,LH_L),22*LH_L));
+  });
+  const legendTop=tlTop+tlH+56, legendH=tasks.reduce((a,t)=>a+t._rowH+6,0)||58, H=legendTop+legendH+90;
+  const sc=2; cv.width=W*sc; cv.height=H*sc; c.setTransform(sc,0,0,sc,0,0); c.textBaseline='alphabetic';
+  // พื้น + หัว
   c.fillStyle='#FBF1DE'; c.fillRect(0,0,W,H);
   c.fillStyle='#1E4532'; c.fillRect(0,0,W,HEAD);
   c.fillStyle='#E2A43B'; c.fillRect(0,HEAD-8,W,8);
-  c.fillStyle='#FBF1DE'; c.font=`800 46px ${F}`; c.textBaseline='alphabetic'; c.fillText('แผนงานประจำวัน · RM TEAM',PAD,72);
+  c.fillStyle='#FBF1DE'; c.font=`800 46px ${F}`; c.fillText('แผนงานประจำวัน · RM TEAM',PAD,72);
   c.fillStyle='#E2A43B'; c.font=`600 26px ${F}`; c.fillText(plThaiDate(plDate)+'   ·   '+S.name+' '+plClock(0)+'–'+plClock(S.len),PAD,116);
   const busy=list.reduce((a,t)=>a+(t.end-t.start),0);
   c.textAlign='right'; c.fillStyle='#FBF1DE'; c.font=`800 40px ${F}`; c.fillText(list.length+' งาน',W-PAD,72);
   c.fillStyle='#DCE6DF'; c.font=`400 22px ${F}`; c.fillText('รวม '+(plDurTxt(busy)||'0 นาที'),W-PAD,112); c.textAlign='left';
-  // แกนเวลา + ช่วง OT
-  const x=m=>LEFT+m/60*HW;
+  // ช่วง OT
   c.fillStyle='rgba(226,164,59,.16)'; c.fillRect(x(S.ot),tlTop-10,x(S.len)-x(S.ot),tlH+10);
   c.save(); c.beginPath(); c.rect(x(S.ot),tlTop-10,x(S.len)-x(S.ot),tlH+10); c.clip(); c.strokeStyle='rgba(226,164,59,.28)'; c.lineWidth=6;
   for(let i=-tlH;i<x(S.len)-x(S.ot)+tlH;i+=22){ c.beginPath(); c.moveTo(x(S.ot)+i,tlTop-10); c.lineTo(x(S.ot)+i+tlH+10,tlTop+tlH); c.stroke(); } c.restore();
   c.fillStyle='#C4862A'; c.font=`800 20px ${F}`; c.textAlign='right'; c.fillText('OT',x(S.len)-10,tlTop+14); c.textAlign='left';
+  // เส้นชั่วโมง
   for(let i=0;i<=hours;i++){
     const xx=x(i*60), ot=i*60>=S.ot;
-    c.strokeStyle=i%1===0?'#E6D6B6':'#EFE3CB'; c.lineWidth=i===0||i===hours?2:1.2;
+    c.strokeStyle='#E6D6B6'; c.lineWidth=i===0||i===hours?2:1.2;
     c.beginPath(); c.moveTo(xx,HEAD+AXIS); c.lineTo(xx,tlTop+tlH); c.stroke();
     c.fillStyle=ot?'#A3243A':'#1B3A2A'; c.font=`700 22px ${F}`; c.textAlign=i===0?'left':(i===hours?'right':'center');
     c.fillText(plClock(i*60),xx,HEAD+AXIS-4);
   }
   c.textAlign='left';
   // แท่งงาน
-  if(!lanes.length){ c.fillStyle='#8C9A8F'; c.font=`600 26px ${F}`; c.fillText('ยังไม่มีงานในกะนี้',LEFT+20,tlTop+BAR/2+10); }
-  lanes.forEach(t=>{
-    const bx=x(t.start)+2, bw=Math.max(8,x(t.end)-x(t.start)-4), by=tlTop+GAP/2+t._row*(BAR+GAP);
+  if(!tasks.length){ c.fillStyle='#8C9A8F'; c.font=`600 26px ${F}`; c.fillText('ยังไม่มีงานในกะนี้',LEFT+20,tlTop+BAR/2+10); }
+  tasks.forEach(t=>{
+    const bx=x(t.start)+2, bw=t._bw, by=tlTop+GAP/2+t._row*(BAR+GAP);
     c.fillStyle='rgba(15,42,29,.22)'; plRoundRect(c,bx+2,by+4,bw,BAR,14); c.fill();
-    c.fillStyle=t._color; plRoundRect(c,bx,by,bw,BAR,14); c.fill();
-    const tc=plTextOn(t._color); c.fillStyle=tc;
-    c.font=`800 24px ${F}`; c.fillText(plFit(c,t.name,bw-24),bx+12,by+33);
-    c.font=`400 18px ${F}`; c.globalAlpha=.9; c.fillText(plFit(c,plClock(t.start)+'–'+plClock(t.end)+(t.area?'  ·  '+t.area:''),bw-24),bx+12,by+59); c.globalAlpha=1;
+    c.fillStyle=t._color; plRoundRect(c,bx,by,bw,BAR,Math.min(14,bw/2)); c.fill();
+    c.fillStyle=plTextOn(t._color);
+    plDrawBlock(c,t._nb,bx+BP,by+BP-2,LH_N,F);
+    c.globalAlpha=.92; plDrawBlock(c,t._tb,bx+BP,by+BP+plBlockH(t._nb,LH_N)+4,LH_T,F); c.globalAlpha=1;
   });
-  // รายละเอียดใต้ไทม์ไลน์
+  // ตารางรายละเอียด
   c.fillStyle='#1B3A2A'; c.font=`800 28px ${F}`; c.fillText('รายละเอียดงาน',PAD,legendTop-16);
-  lanes.forEach((t,i)=>{
-    const y=legendTop+i*LROW;
-    if(i%2===0){ c.fillStyle='#F4E8D0'; plRoundRect(c,PAD-12,y,W-PAD*2+24,LROW-6,12); c.fill(); }
-    c.fillStyle=t._color; plRoundRect(c,PAD,y+14,24,24,6); c.fill();
-    c.fillStyle='#1B3A2A'; c.font=`700 22px ${F}`; c.fillText(plClock(t.start)+'–'+plClock(t.end),PAD+40,y+35);
-    c.font=`800 22px ${F}`; c.fillText(plFit(c,t.name,420),PAD+210,y+35);
-    c.font=`400 20px ${F}`; c.fillStyle='#5B6E61';
-    const rest=[t.area?'พื้นที่: '+t.area:'',t.note?'หมายเหตุ: '+t.note:''].filter(Boolean).join('   ·   ');
-    c.fillText(plFit(c,rest+(plIsOT(t.start)?'   ·   OT':''),W-PAD*2-660),PAD+650,y+35);
+  let y=legendTop;
+  tasks.forEach((t,i)=>{
+    const h=t._rowH;
+    if(i%2===0){ c.fillStyle='#F4E8D0'; plRoundRect(c,PAD-12,y,W-PAD*2+24,h,12); c.fill(); }
+    c.fillStyle=t._color; plRoundRect(c,PAD,y+h/2-12,24,24,6); c.fill();
+    c.fillStyle='#1B3A2A'; c.font=`700 22px ${F}`; c.fillText(plClock(t.start)+'–'+plClock(t.end),C_TIME,y+h/2+8);
+    plDrawBlock(c,t._ln,C_NAME,y+(h-plBlockH(t._ln,LH_L))/2-3,LH_L,F);
+    c.fillStyle='#5B6E61'; plDrawBlock(c,t._lr,C_REST,y+(h-plBlockH(t._lr,LH_L))/2-3,LH_L,F);
+    y+=h+6;
   });
   c.fillStyle='#8C9A8F'; c.font=`400 18px ${F}`; c.fillText('HRM Trouble Report · UACJ (Thailand) Hot Rolling',PAD,H-36);
   return new Promise(res=>cv.toBlob(b=>res(b),'image/png'));
